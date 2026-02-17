@@ -4,7 +4,16 @@ import { Grant, Proposal } from '@/types';
 const API_BASE = '/api';
 
 // Enable Mock Mode if on GitHub Pages or if explicitly set
-const IS_DEMO = window.location.hostname.includes('github.io') || import.meta.env.MODE === 'demo';
+const IS_GH_PAGES = window.location.hostname.includes('github.io');
+const IS_DEMO_ENV = import.meta.env.MODE === 'demo';
+const IS_DEMO = IS_GH_PAGES || IS_DEMO_ENV;
+
+console.log(' [DEBUG] API Initialization:', {
+    hostname: window.location.hostname,
+    IS_GH_PAGES,
+    IS_DEMO_ENV,
+    IS_DEMO
+});
 
 function getToken(): string | null {
     return localStorage.getItem('giaa_token');

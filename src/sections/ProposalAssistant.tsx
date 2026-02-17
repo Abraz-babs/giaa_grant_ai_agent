@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils';
 import { HoloCard } from '@/components/HoloCard';
 import { NeonButton } from '@/components/NeonButton';
 import type { Proposal, Grant } from '@/types';
-import { 
-  FileText, 
-  Sparkles, 
-  Save, 
-  Download, 
+import {
+  FileText,
+  Sparkles,
+  Save,
+  Download,
   ChevronDown,
   ChevronUp,
   CheckCircle,
@@ -56,6 +56,32 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
     }
   };
 
+  const handleDownload = () => {
+    if (!selectedProposal) return;
+
+    const grantName = getGrantName(selectedProposal.grantId);
+    let textContent = `PROPOSAL: ${selectedProposal.title}\n`;
+    textContent += `GRANT: ${grantName}\n`;
+    textContent += `STATUS: ${selectedProposal.status}\n`;
+    textContent += `DATE: ${new Date().toLocaleDateString()}\n\n`;
+    textContent += `----------------------------------------\n\n`;
+
+    selectedProposal.content.forEach(section => {
+      textContent += `[${section.title.toUpperCase()}]\n`;
+      textContent += `${section.content}\n\n`;
+    });
+
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedProposal.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_proposal.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className={cn('space-y-6', className)}>
       {/* Generate New Proposal */}
@@ -64,7 +90,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
           <Sparkles className="w-5 h-5 text-neon-cyan" />
           AI Proposal Generator
         </h3>
-        
+
         <div className="flex flex-col md:flex-row gap-4">
           <select
             value={selectedGrant}
@@ -80,7 +106,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
               </option>
             ))}
           </select>
-          
+
           <NeonButton
             onClick={handleGenerate}
             loading={isGenerating}
@@ -194,7 +220,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                               )}
                             </div>
                           </button>
-                          
+
                           {expandedSection === section.id && (
                             <div className="p-4 bg-dark-bg/50">
                               <textarea
@@ -202,7 +228,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                                 onChange={(e) => {
                                   onUpdateProposal?.(proposal.id, {
                                     content: proposal.content.map(c =>
-                                      c.id === section.id 
+                                      c.id === section.id
                                         ? { ...c, content: e.target.value, wordCount: e.target.value.split(' ').length }
                                         : c
                                     )
@@ -212,7 +238,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                                          text-white p-3 focus:outline-none focus:border-neon-cyan
                                          resize-none font-rajdhani"
                               />
-                              
+
                               {/* AI Suggestions */}
                               {section.aiSuggestions && section.aiSuggestions.length > 0 && (
                                 <div className="mt-3 p-3 rounded-lg bg-neon-cyan/5 border border-neon-cyan/20">
@@ -221,8 +247,8 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                                   </p>
                                   <ul className="space-y-1">
                                     {section.aiSuggestions.map((suggestion, i) => (
-                                      <li 
-                                        key={i} 
+                                      <li
+                                        key={i}
                                         className="text-sm text-white/70 flex items-center gap-2 cursor-pointer
                                                  hover:text-neon-cyan transition-colors"
                                       >
@@ -244,23 +270,24 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                       <NeonButton size="sm" icon={<Save className="w-4 h-4" />}>
                         Save Changes
                       </NeonButton>
-                      <NeonButton 
-                        size="sm" 
-                        variant="outline" 
+                      <NeonButton
+                        size="sm"
+                        variant="outline"
                         color="green"
                         icon={<CheckCircle className="w-4 h-4" />}
                       >
                         Mark as Final
                       </NeonButton>
-                      <NeonButton 
-                        size="sm" 
+                      <NeonButton
+                        size="sm"
                         variant="outline"
                         icon={<Download className="w-4 h-4" />}
+                        onClick={handleDownload}
                       >
-                        Export PDF
+                        Download
                       </NeonButton>
-                      <NeonButton 
-                        size="sm" 
+                      <NeonButton
+                        size="sm"
                         variant="ghost"
                         icon={<Copy className="w-4 h-4" />}
                       >

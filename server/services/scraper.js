@@ -151,22 +151,42 @@ export async function runScraper() {
         totalFound = allGrants.length;
         console.log(`[Scraper] Found ${totalFound} raw opportunities`);
 
+        // Helper to extract amount
+        function extractAmount(text) {
+            const combined = (text || '').toLowerCase();
+            // Match $10,000, 5000 USD, etc.
+            // Regex for grabbing the first significant number associated with currency
+            const match = combined.match(/(\$|€|£|₦)\s?(\d{1,3}(?:,\d{3})*(?:\.\d+)?)|(\d{1,3}(?:,\d{3})*(?:\.\d+)?)\s?(usd|eur|gbp|ngn)/i);
+
+            if (match) {
+                // Parse the number
+                const numStr = (match[2] || match[3]).replace(/,/g, '');
+                const amount = parseFloat(numStr);
+                if (!isNaN(amount)) {
+                    return { min: amount, max: amount * 2 }; // Estimate max as 2x min if range not found
+                }
+            }
+            return { min: 0, max: 0 };
+        }
+
         for (const g of allGrants) {
             const combined = `${g.name} ${g.description}`;
             const relevance = calculateRelevanceScore(combined);
             const category = detectCategory(combined);
+            const { min, max } = extractAmount(combined);
 
             // Check for duplicate
             const existing = dbGet('SELECT id FROM grants WHERE name = ? AND source = ?', [g.name, g.source]);
             if (existing) continue;
 
             dbRun(`INSERT INTO grants (name, organization, description, category, relevance_score, 
-             website_url, source, deadline, status, estimated_success_rate, readiness_score)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?, ?)`,
+             website_url, source, deadline, status, estimated_success_rate, readiness_score, amount_min, amount_max, currency)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?, ?, ?, ?, 'USD')`,
                 [g.name, g.organization, g.description, category, relevance,
                 g.website_url, g.source, g.deadline || null,
                 relevance === 'HIGH' ? 25 : 10,
-                relevance === 'HIGH' ? 60 : 30]);
+                relevance === 'HIGH' ? 60 : 30,
+                    min, max]);
 
             totalMatched++;
 

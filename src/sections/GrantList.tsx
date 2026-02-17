@@ -85,13 +85,22 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
+  // Sort: High > Medium > Low
+  const sortedGrants = filteredGrants.sort((a, b) => {
+    const scoreMap: Record<string, number> = { HIGH: 3, MEDIUM: 2, LOW: 1 };
+    return (scoreMap[b.relevanceScore] || 0) - (scoreMap[a.relevanceScore] || 0);
+  });
+
   const formatAmount = (amount: Grant['amount']) => {
+    if (!amount) return 'Amount TBD';
     const { min, max, currency } = amount;
+    if (min === 0 && max === 0) return 'Amount TBD';
     if (min === max) return `${currency} ${min.toLocaleString()}`;
     return `${currency} ${min.toLocaleString()} - ${max.toLocaleString()}`;
   };
 
-  const getDaysRemaining = (deadline: string) => {
+  const getDaysRemaining = (deadline: string | null) => {
+    if (!deadline) return null;
     const days = Math.ceil((new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
     return days;
   };
@@ -106,7 +115,7 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
             Grant Opportunities
           </h2>
           <p className="text-white/50 text-sm mt-1">
-            {filteredGrants.length} grants found • {grants.filter(g => g.relevanceScore === 'HIGH').length} high relevance
+            {sortedGrants.length} grants found • {grants.filter(g => g.relevanceScore === 'HIGH').length} high relevance matches
           </p>
         </div>
 
@@ -176,11 +185,12 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
             )}
           </div>
         ) : (
-          filteredGrants.map((grant) => {
+
+          sortedGrants.map((grant) => {
             const daysRemaining = getDaysRemaining(grant.deadline);
             const isExpanded = expandedGrant === grant.id;
             const StatusIcon = statusConfig[grant.status].icon;
-            const relevance = relevanceConfig[grant.relevanceScore];
+            const relevance = relevanceConfig[grant.relevanceScore] || relevanceConfig['LOW'];
 
             return (
               <div
@@ -206,7 +216,7 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
                         </h3>
                         <span className={cn(
                           'px-2 py-0.5 text-xs rounded border font-rajdhani uppercase tracking-wider',
-                          categoryColors[grant.category]
+                          categoryColors[grant.category] || categoryColors.GENERAL
                         )}>
                           {grant.category.replace('_', ' ')}
                         </span>
@@ -229,11 +239,11 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
                         </span>
                         <span className={cn(
                           'flex items-center gap-1',
-                          daysRemaining <= 14 && 'text-red-400',
-                          daysRemaining <= 30 && daysRemaining > 14 && 'text-yellow-400'
+                          daysRemaining !== null && daysRemaining <= 14 && 'text-red-400',
+                          daysRemaining !== null && daysRemaining <= 30 && daysRemaining > 14 && 'text-yellow-400'
                         )}>
                           <Calendar className="w-4 h-4" />
-                          {daysRemaining} days remaining
+                          {daysRemaining !== null ? `${daysRemaining} days remaining` : 'No Deadline'}
                         </span>
                       </div>
                     </div>

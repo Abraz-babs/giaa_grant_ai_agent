@@ -1,0 +1,159 @@
+import bcrypt from 'bcryptjs';
+import { dbGet, dbAll, dbRun } from './database.js';
+
+export function seedDatabase() {
+    // --- Users ---
+    const existingUsers = dbAll('SELECT id FROM users');
+    if (existingUsers.length === 0) {
+        const hash = bcrypt.hashSync('Glisten2026!', 10);
+        const users = [
+            { name: 'Zakiyah Zuhair', email: 'zakiyah@glistenacademy.com', role: 'ADMIN', phone: '+2348012345001' },
+            { name: 'Zarah Zuhair', email: 'zarah@glistenacademy.com', role: 'ADMIN', phone: '+2348012345002' },
+            { name: 'Mr. Alabi', email: 'alabi@glistenacademy.com', role: 'MANAGER', phone: '+2348012345003' },
+            { name: 'Amina Bello', email: 'amina@glistenacademy.com', role: 'VIEWER', phone: '+2348012345004' },
+            { name: 'Yusuf Ibrahim', email: 'yusuf@glistenacademy.com', role: 'VIEWER', phone: '+2348012345005' }
+        ];
+        for (const u of users) {
+            dbRun('INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)',
+                [u.name, u.email, hash, u.role, u.phone]);
+        }
+        console.log('✓ Seeded 5 users');
+    }
+
+    // --- School Profile ---
+    const existingProfile = dbGet('SELECT id FROM school_profile LIMIT 1');
+    if (!existingProfile) {
+        const profile = {
+            id: '1',
+            name: 'Glisten International Academy',
+            type: 'K-12 International Academy',
+            location: { address: '15 Innovation Drive', city: 'Abuja', state: 'FCT', country: 'Nigeria', zip: '900001' },
+            contact: { email: 'admin@glistenacademy.com', phone: '+234-801-234-5678', website: 'https://glistenacademy.com' },
+            description: 'A premier K-12 international academy in Nigeria specializing in STEM, AI, and robotics education. We prepare students for global competence through innovative teaching, technology integration, and character-based learning.',
+            establishedYear: 2015,
+            enrollment: { total: 850, grades: 'K-12', internationalStudents: 120 },
+            accreditation: ['Nigerian National Board', 'Cambridge International', 'IB World School Candidate'],
+            programs: [
+                { id: '1', name: 'AI & Machine Learning Lab', category: 'STEM', description: 'Hands-on AI projects for grades 7-12', status: 'ACTIVE' },
+                { id: '2', name: 'Robotics Competition Team', category: 'STEM', description: 'FIRST Robotics and VEX IQ competition prep', status: 'ACTIVE' },
+                { id: '3', name: 'Inclusive Education Initiative', category: 'INCLUSIVE', description: 'Programs for students with diverse learning needs', status: 'ACTIVE' },
+                { id: '4', name: 'Environmental Science Club', category: 'ENVIRONMENT', description: 'Sustainability and climate research projects', status: 'ACTIVE' }
+            ],
+            achievements: ['2024 National STEM Innovation Award', 'Top 10 International Schools in West Africa', 'UNESCO Global Education Partnership', '96% university placement rate'],
+            documents: [
+                { id: '1', name: 'School Prospectus 2024', type: 'PDF', category: 'General', uploadDate: '2024-01-15' },
+                { id: '2', name: 'Financial Statements FY2024', type: 'PDF', category: 'Financial', uploadDate: '2024-03-01' },
+                { id: '3', name: 'Accreditation Certificate', type: 'PDF', category: 'Legal', uploadDate: '2024-02-20' }
+            ]
+        };
+        dbRun('INSERT INTO school_profile (data) VALUES (?)', [JSON.stringify(profile)]);
+        console.log('✓ Seeded school profile');
+    }
+
+    // --- Sample Grants ---
+    const existingGrants = dbAll('SELECT id FROM grants');
+    if (existingGrants.length === 0) {
+        const grants = [
+            {
+                name: 'Africa STEM Education Innovation Grant',
+                organization: 'World Bank Education Fund',
+                amount_min: 50000, amount_max: 250000, currency: 'USD',
+                deadline: '2026-06-15',
+                description: 'Supporting innovative STEM education models in Sub-Saharan Africa with focus on technology integration, teacher training, and scalable curriculum development.',
+                eligibility: JSON.stringify(['Registered educational institution in Africa', 'Minimum 3 years operational', 'Demonstrated STEM programs']),
+                category: 'TECHNOLOGY',
+                relevance_score: 'HIGH', status: 'NEW',
+                requirements: JSON.stringify([{ id: '1', name: 'Project Proposal', type: 'document', status: 'PENDING', description: 'Detailed project plan' }, { id: '2', name: 'Financial Report', type: 'document', status: 'PENDING' }]),
+                readiness_score: 78, estimated_success_rate: 35, source: 'Seeded'
+            },
+            {
+                name: 'Google AI for Education Grant',
+                organization: 'Google.org',
+                amount_min: 100000, amount_max: 500000, currency: 'USD',
+                deadline: '2026-07-31',
+                description: 'Empowering schools to integrate AI and machine learning into curricula across developing nations, with emphasis on ethical AI education and practical applications.',
+                eligibility: JSON.stringify(['Existing AI/tech curriculum', 'Measurable student outcomes', 'Open to schools worldwide']),
+                category: 'TECHNOLOGY',
+                relevance_score: 'HIGH', status: 'NEW',
+                requirements: JSON.stringify([]),
+                readiness_score: 85, estimated_success_rate: 25, source: 'Seeded'
+            },
+            {
+                name: 'UNICEF Inclusive Education Fund',
+                organization: 'UNICEF',
+                amount_min: 25000, amount_max: 100000, currency: 'USD',
+                deadline: '2026-05-20',
+                description: 'Supporting schools in developing inclusive education models that serve children with disabilities and diverse learning needs.',
+                eligibility: JSON.stringify(['K-12 educational institutions', 'Active inclusion programs', 'Located in eligible UNICEF countries']),
+                category: 'GENERAL',
+                relevance_score: 'HIGH', status: 'REVIEWING',
+                requirements: JSON.stringify([]),
+                readiness_score: 65, estimated_success_rate: 40, source: 'Seeded'
+            },
+            {
+                name: 'UK FCDO Education Technology Grant',
+                organization: 'UK Foreign, Commonwealth & Development Office',
+                amount_min: 75000, amount_max: 300000, currency: 'GBP',
+                deadline: '2026-08-15',
+                description: 'Funding innovative use of technology in education across Commonwealth nations, focused on bridging the digital divide.',
+                eligibility: JSON.stringify(['Commonwealth nation institution', 'Track record in ed-tech', 'Partnership with local government']),
+                category: 'TECHNOLOGY',
+                relevance_score: 'MEDIUM', status: 'NEW',
+                requirements: JSON.stringify([]),
+                readiness_score: 55, estimated_success_rate: 20, source: 'Seeded'
+            },
+            {
+                name: 'Mastercard Foundation Scholars Program',
+                organization: 'Mastercard Foundation',
+                amount_min: 200000, amount_max: 1000000, currency: 'USD',
+                deadline: '2026-09-30',
+                description: 'Enabling young people in Africa to access quality education and develop leadership skills for transforming their communities.',
+                eligibility: JSON.stringify(['African institution', 'Scholarship program capacity', 'Community impact focus']),
+                category: 'GENERAL',
+                relevance_score: 'MEDIUM', status: 'SUBMITTED',
+                requirements: JSON.stringify([]),
+                readiness_score: 50, estimated_success_rate: 15, source: 'Seeded'
+            },
+            {
+                name: 'USAID Robotics & Innovation in Learning',
+                organization: 'USAID',
+                amount_min: 50000, amount_max: 200000, currency: 'USD',
+                deadline: '2026-04-30',
+                description: 'Promoting hands-on robotics and innovation labs within schools across Africa, emphasizing practical skills for future workforce readiness.',
+                eligibility: JSON.stringify(['Schools with existing STEM infrastructure', 'Robotics programs or plans', 'Measurable outcomes']),
+                category: 'TECHNOLOGY',
+                relevance_score: 'HIGH', status: 'APPLYING',
+                requirements: JSON.stringify([]),
+                readiness_score: 72, estimated_success_rate: 30, source: 'Seeded'
+            }
+        ];
+
+        for (const g of grants) {
+            dbRun(`INSERT INTO grants (name, organization, amount_min, amount_max, currency, deadline, 
+             description, eligibility, category, relevance_score, status, requirements, 
+             readiness_score, estimated_success_rate, source)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [g.name, g.organization, g.amount_min, g.amount_max, g.currency, g.deadline,
+                g.description, g.eligibility, g.category, g.relevance_score, g.status, g.requirements,
+                g.readiness_score, g.estimated_success_rate, g.source]);
+        }
+        console.log('✓ Seeded 6 grants');
+    }
+
+    // --- Sample Notifications ---
+    const existingNotifications = dbAll('SELECT id FROM notifications');
+    if (existingNotifications.length === 0) {
+        const notifications = [
+            { type: 'GRANT_FOUND', title: 'New High-Match Grant', message: 'AI found "Africa STEM Education Innovation Grant" — 78% match', priority: 'HIGH' },
+            { type: 'DEADLINE', title: 'Deadline Approaching', message: 'USAID Robotics grant deadline in 72 days', priority: 'URGENT' },
+            { type: 'SYSTEM', title: 'Agent Complete', message: 'AI Agent scan completed. 6 grants found, 4 high-relevance matches.', priority: 'LOW' },
+            { type: 'GRANT_FOUND', title: 'Google AI Grant Available', message: 'New $100K-$500K grant from Google.org for AI education — 85% match', priority: 'HIGH' },
+            { type: 'DEADLINE', title: 'UNICEF Fund Closing Soon', message: 'UNICEF Inclusive Education Fund deadline in 92 days', priority: 'MEDIUM' }
+        ];
+        for (const n of notifications) {
+            dbRun('INSERT INTO notifications (type, title, message, priority) VALUES (?, ?, ?, ?)',
+                [n.type, n.title, n.message, n.priority]);
+        }
+        console.log('✓ Seeded 5 notifications');
+    }
+}

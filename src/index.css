@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 210 20% 90%;
+    --card: 220 18% 10%;
+    --card-foreground: 210 20% 90%;
+    --popover: 220 18% 10%;
+    --popover-foreground: 210 20% 90%;
+    --primary: 200 60% 50%;
+    --primary-foreground: 220 20% 7%;
+    --secondary: 265 50% 55%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 215 15% 55%;
+    --accent: 160 55% 50%;
+    --accent-foreground: 220 20% 7%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 20%;
+    --input: 220 15% 15%;
+    --ring: 200 60% 50%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    background: hsl(220 20% 7%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: hsl(200 60% 50% / 0.3);
+    color: hsl(200 60% 90%);
+  }
+}
+
+/* Typography */
+.font-display {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+}
+
+.font-rajdhani {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-mono-tech {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Enterprise Panel Effect */
+.holo-panel {
+  background: linear-gradient(135deg,
+    hsl(220 18% 12% / 0.9) 0%,
+    hsl(220 18% 10% / 0.95) 50%,
+    hsl(220 18% 12% / 0.9) 100%);
+  border: 1px solid hsl(215 20% 22%);
+  box-shadow:
+    0 0 0 1px hsl(200 60% 50% / 0.05),
+    0 4px 16px hsl(0 0% 0% / 0.3),
+    inset 0 1px 0 hsl(200 60% 50% / 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsl(200 60% 50% / 0.4) 20%,
+    hsl(200 60% 50% / 0.4) 80%,
+    transparent 100%);
+}
+
+.holo-panel::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsl(200 60% 50% / 0.15) 20%,
+    hsl(200 60% 50% / 0.15) 80%,
+    transparent 100%);
+}
+
+/* Subtle corner accents (enterprise-friendly) */
+.glow-corner {
+  position: relative;
+}
+
+.glow-corner::before,
+.glow-corner::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid hsl(200 60% 50% / 0.3);
+  transition: all 0.3s ease;
+}
+
+.glow-corner::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.glow-corner::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Hexagon Shape */
+.hexagon {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Subtle Glow Effects */
+.neon-glow {
+  box-shadow:
+    0 0 4px hsl(200 60% 50% / 0.3),
+    0 0 8px hsl(200 60% 50% / 0.15);
+}
+
+.neon-text-glow {
+  text-shadow:
+    0 0 4px hsl(200 60% 50% / 0.4);
+}
+
+.neon-border-glow {
+  border-color: hsl(200 60% 50% / 0.5);
+  box-shadow: 0 0 4px hsl(200 60% 50% / 0.2);
+}
+
+/* Status Indicators */
+.status-active {
+  background: hsl(160 55% 50%);
+  box-shadow: 0 0 6px hsl(160 55% 50% / 0.5);
+}
+
+.status-pending {
+  background: hsl(45 80% 55%);
+  box-shadow: 0 0 6px hsl(45 80% 55% / 0.5);
+}
+
+.status-urgent {
+  background: hsl(0 70% 55%);
+  box-shadow: 0 0 6px hsl(0 70% 55% / 0.5);
+}
+
+/* Grid Background (subtle) */
+.grid-bg {
+  background-image:
+    linear-gradient(hsl(200 60% 50% / 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(200 60% 50% / 0.015) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Circular Progress */
+.circular-progress {
+  transform: rotate(-90deg);
+}
+
+.circular-progress circle {
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+/* Enterprise Button */
+.btn-holo {
+  background: linear-gradient(135deg,
+    hsl(200 60% 50% / 0.08) 0%,
+    hsl(200 60% 50% / 0.03) 100%);
+  border: 1px solid hsl(200 60% 50% / 0.25);
+  color: hsl(200 60% 80%);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-holo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsl(200 60% 50% / 0.1) 50%,
+    transparent 100%);
+  transition: left 0.5s ease;
+}
+
+.btn-holo:hover::before {
+  left: 100%;
+}
+
+.btn-holo:hover {
+  border-color: hsl(200 60% 50% / 0.5);
+  box-shadow: 0 0 8px hsl(200 60% 50% / 0.2);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(220 18% 10%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(215 20% 25%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(200 60% 50%);
+}
+
+/* Line-clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .holo-panel {
+    margin: 0.5rem;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

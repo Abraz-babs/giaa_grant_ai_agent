@@ -33,71 +33,61 @@ export function seedDatabase() {
                 city: 'Abuja',
                 address: 'Plot 1457, Cadastral Zone B8, Jahi District'
             },
-            establishedYear: 2015,
+            establishedYear: 2006,
             studentCount: {
-                total: 850,
-                male: 450,
-                female: 400,
-                specialNeeds: 25
+                total: 1250,
+                male: 600,
+                female: 650,
+                specialNeeds: 45
             },
             staffCount: {
-                teaching: 65,
-                nonTeaching: 20
+                teaching: 120,
+                nonTeaching: 50
             },
             facilities: [
-                'Robotics Lab',
-                'AI Research Center',
-                'Modern Library',
-                'Science Laboratories',
+                'Robotics & AI Lab',
+                'Science Laboratories (Physics, Chemistry, Biology)',
+                'ICT Complex',
+                'Library & Research Center',
                 'Sports Complex',
-                'Digital Arts Studio'
+                'Auditorium',
+                'Boarding Facilities'
             ],
             programs: [
-                'Cambridge International',
-                'Nigerian Curriculum',
-                'STEM Initiative',
-                'Coding & AI'
+                'Earley Years Foundation Stage',
+                'Primary Education (Nigerian/British)',
+                'Junior Secondary (BECE/Cambridge Checkpoint)',
+                'Senior Secondary (WAEC/NECO/IGCSE)',
+                'Robotics & Coding Club'
             ],
             achievements: [
-                '2024 National STEM Innovation Award',
-                'Top 10 International Schools in West Africa',
-                'UNESCO Global Education Partnership',
-                '96% university placement rate'
+                'Best Private Primary School in FCT (Inaugural Year)',
+                'Outstanding NGO of the Year (Alumni Award)',
+                'VEX Robotics World Championship Participants',
+                'Accredited by Dept of Quality Assurance'
             ],
             focusAreas: [
-                'Technology & AI',
-                'Character Development',
-                'Global Citizenship',
-                'Academic Excellence'
+                'Academic Excellence',
+                'Technological Innovation',
+                'Moral & Character Development',
+                'Global Citizenship'
             ],
             registrationDetails: {
-                registrationNumber: 'GIA-2015-001',
+                registrationNumber: 'GIA-2006-REG',
                 accreditationStatus: 'Fully Accredited',
                 ngoStatus: false
             },
             contactInfo: {
                 email: 'info@glisteninternationalacademy.com',
-                phone: '+234 903 888 2824',
+                phone: '+234 803 123 4567',
                 website: 'https://glisteninternationalacademy.com'
             },
-            documents: [
-                { id: '1', name: 'School Prospectus 2024', type: 'PDF', url: '#', uploadedAt: '2024-01-15', expiresAt: '2025-01-15' },
-                { id: '2', name: 'Accreditation Certificate', type: 'PDF', url: '#', uploadedAt: '2024-02-20' }
-            ],
-            impactStories: [
-                {
-                    id: '1',
-                    title: 'Community Tech Drive',
-                    description: 'Students taught basic computer skills to 200 local community members.',
-                    beneficiaries: 200,
-                    outcome: 'Increased digital literacy',
-                    date: '2023-11-15'
-                }
-            ],
+            documents: [],
+            impactStories: [],
             strategicGoals: [
-                'Integrate AI into all grade levels by 2026',
-                'Achieve 100% university acceptance rate',
-                'Expand scholarship program for underprivileged students'
+                'Expand AI & Robotics integration across all levels',
+                'Maintain 100% distinction rate in external exams',
+                'Foster global partnerships for student exchange'
             ]
         };
         dbRun('INSERT INTO school_profile (data) VALUES (?)', [JSON.stringify(profile)]);

@@ -3,6 +3,7 @@ import * as cheerio from 'cheerio';
 import { dbGet, dbAll, dbRun } from '../db/database.js';
 import { sendGrantNotification } from './whatsapp.js';
 
+const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const KEYWORDS = ['education', 'STEM', 'Africa', 'Nigeria', 'school', 'technology', 'AI', 'robotics', 'inclusive', 'grant'];
 
 // Scoring function for relevance
@@ -33,7 +34,7 @@ async function scrapeFundsForNGOs() {
     try {
         const { data } = await axios.get('https://fundsforngos.org/tag/education/', {
             timeout: 15000,
-            headers: { 'User-Agent': 'Mozilla/5.0 (GIAA Grant Agent Bot)' }
+            headers: { 'User-Agent': USER_AGENT }
         });
         const $ = cheerio.load(data);
         const grants = [];
@@ -65,7 +66,7 @@ async function scrapeOpportunityDesk() {
     try {
         const { data } = await axios.get('https://opportunitydesk.org/category/grants/', {
             timeout: 15000,
-            headers: { 'User-Agent': 'Mozilla/5.0 (GIAA Grant Agent Bot)' }
+            headers: { 'User-Agent': USER_AGENT }
         });
         const $ = cheerio.load(data);
         const grants = [];
@@ -97,7 +98,13 @@ async function scrapeGrantsGov() {
     try {
         const { data } = await axios.post('https://grantsapi.com/api/v2/opportunities/search',
             { keyword: 'education STEM', oppStatuses: 'posted', rows: 10 },
-            { timeout: 15000, headers: { 'Content-Type': 'application/json' } }
+            {
+                timeout: 15000,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'User-Agent': USER_AGENT
+                }
+            }
         );
 
         if (!data || !data.opportunities) return [];
@@ -111,7 +118,8 @@ async function scrapeGrantsGov() {
             source: 'Grants.gov'
         }));
     } catch (err) {
-        console.warn('[Scraper] Grants.gov API failed:', err.message);
+        // Log but don't fail the whole process
+        console.warn(`[Scraper] Grants.gov API failed: ${err.message}`);
         return [];
     }
 }

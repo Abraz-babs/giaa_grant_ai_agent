@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Login } from '@/pages/Login';
@@ -33,7 +33,7 @@ import {
 type ViewType = 'dashboard' | 'grants' | 'ai-agent' | 'proposals' | 'alerts' | 'profile' | 'settings';
 
 function AppContent() {
-  const { isAuthenticated, isLoading: authLoading, user, logout } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -71,7 +71,7 @@ function AppContent() {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl lg:text-3xl font-display font-bold text-white mb-2">
-                Welcome, <span className="text-brand-400">{user?.name?.split(' ')[0] || 'User'}</span>
+                Welcome, <span className="text-brand-400">{user?.name || 'User'}</span>
               </h1>
               <p className="text-slate-400 max-w-2xl">
                 Your intelligent grant discovery and management system. The AI agent is actively
@@ -243,6 +243,7 @@ function AppContent() {
               isLoading={grantsStore.isLoading}
               onGrantClick={(grant) => grantsStore.setSelectedGrant(grant)}
               onStatusChange={grantsStore.updateGrantStatus}
+              selectedId={grantsStore.selectedGrant?.id}
             />
           </div>
         );

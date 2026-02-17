@@ -1,6 +1,7 @@
 {
     "name": "giaa-grant-agent-server",
     "version": "1.0.0",
+    "author": "Abraz-babs",
     "type": "module",
     "scripts": {
         "start": "node index.js",

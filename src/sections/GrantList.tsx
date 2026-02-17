@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils';
 import { HoloCard } from '@/components/HoloCard';
 import { NeonButton } from '@/components/NeonButton';
 import type { Grant, GrantCategory } from '@/types';
-import { 
-  Search, 
-  ChevronDown, 
-  ExternalLink, 
-  Calendar, 
+import {
+  Search,
+  ChevronDown,
+  ExternalLink,
+  Calendar,
   DollarSign,
   Building2,
   Star,
@@ -56,20 +56,28 @@ const relevanceConfig = {
   LOW: { color: 'text-red-400', bg: 'bg-red-500/20', label: 'Low' }
 };
 
-export const GrantList: React.FC<GrantListProps> = ({
+export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
   grants,
   isLoading,
-  onGrantClick,
   onStatusChange,
-  className
+  className,
+  selectedId
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<GrantCategory | 'ALL'>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<Grant['status'] | 'ALL'>('ALL');
   const [expandedGrant, setExpandedGrant] = useState<string | null>(null);
 
+  // Auto-expand selected grant when it changes
+  React.useEffect(() => {
+    if (selectedId) {
+      setExpandedGrant(selectedId);
+      // Optional: scroll to element logic could go here
+    }
+  }, [selectedId]);
+
   const filteredGrants = grants.filter(grant => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       grant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       grant.organization.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'ALL' || grant.category === selectedCategory;
@@ -153,7 +161,19 @@ export const GrantList: React.FC<GrantListProps> = ({
           </div>
         ) : filteredGrants.length === 0 ? (
           <div className="text-center py-12 text-white/50">
-            <p>No grants found matching your criteria</p>
+            <p className="mb-4">
+              {grants.length === 0
+                ? "No grants loaded. Please try refreshing the data."
+                : "No grants found matching your criteria"}
+            </p>
+            {grants.length === 0 && (
+              <NeonButton
+                variant="ghost"
+                onClick={() => window.location.reload()}
+              >
+                Refresh Data
+              </NeonButton>
+            )}
           </div>
         ) : (
           filteredGrants.map((grant) => {
@@ -165,6 +185,7 @@ export const GrantList: React.FC<GrantListProps> = ({
             return (
               <div
                 key={grant.id}
+                id={`grant-${grant.id}`}
                 className={cn(
                   'group relative border rounded-lg transition-all duration-300',
                   'bg-dark-panel/30 border-white/10 hover:border-neon-cyan/50',
@@ -172,7 +193,7 @@ export const GrantList: React.FC<GrantListProps> = ({
                 )}
               >
                 {/* Main Row */}
-                <div 
+                <div
                   className="p-4 cursor-pointer"
                   onClick={() => setExpandedGrant(isExpanded ? null : grant.id)}
                 >
@@ -239,7 +260,7 @@ export const GrantList: React.FC<GrantListProps> = ({
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-white/10 pt-4 animate-in slide-in-from-top-2">
                     <p className="text-white/70 text-sm mb-4">{grant.description}</p>
-                    
+
                     {grant.aiSummary && (
                       <div className="p-3 rounded-lg bg-neon-cyan/5 border border-neon-cyan/20 mb-4">
                         <p className="text-xs text-neon-cyan uppercase tracking-wider mb-1">AI Analysis</p>
@@ -279,17 +300,17 @@ export const GrantList: React.FC<GrantListProps> = ({
                           <span className={cn(
                             'text-sm font-orbitron',
                             grant.applicationReadiness.score >= 80 ? 'text-neon-green' :
-                            grant.applicationReadiness.score >= 60 ? 'text-yellow-400' : 'text-red-400'
+                              grant.applicationReadiness.score >= 60 ? 'text-yellow-400' : 'text-red-400'
                           )}>
                             {grant.applicationReadiness.score}%
                           </span>
                         </div>
                         <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className={cn(
                               'h-full rounded-full transition-all duration-500',
                               grant.applicationReadiness.score >= 80 ? 'bg-neon-green' :
-                              grant.applicationReadiness.score >= 60 ? 'bg-yellow-400' : 'bg-red-400'
+                                grant.applicationReadiness.score >= 60 ? 'bg-yellow-400' : 'bg-red-400'
                             )}
                             style={{ width: `${grant.applicationReadiness.score}%` }}
                           />
@@ -301,17 +322,21 @@ export const GrantList: React.FC<GrantListProps> = ({
                     )}
 
                     <div className="flex flex-wrap gap-3">
-                      <NeonButton 
-                        size="sm" 
-                        onClick={() => onGrantClick?.(grant)}
+                      <NeonButton
+                        size="sm"
+                        onClick={() => {
+                          if (grant.websiteUrl) window.open(grant.websiteUrl, '_blank');
+                        }}
+                        disabled={!grant.websiteUrl}
+                        className={!grant.websiteUrl ? 'opacity-50 cursor-not-allowed' : ''}
                       >
-                        View Details
+                        {grant.websiteUrl ? 'Visit Official Site' : 'No Link Available'}
                         <ExternalLink className="w-4 h-4" />
                       </NeonButton>
-                      
+
                       {grant.status === 'NEW' && (
-                        <NeonButton 
-                          size="sm" 
+                        <NeonButton
+                          size="sm"
                           variant="outline"
                           color="green"
                           onClick={() => onStatusChange?.(grant.id, 'REVIEWING')}
@@ -319,26 +344,15 @@ export const GrantList: React.FC<GrantListProps> = ({
                           Start Review
                         </NeonButton>
                       )}
-                      
+
                       {grant.status === 'REVIEWING' && (
-                        <NeonButton 
-                          size="sm" 
+                        <NeonButton
+                          size="sm"
                           variant="outline"
                           color="cyan"
                           onClick={() => onStatusChange?.(grant.id, 'APPLYING')}
                         >
                           Start Application
-                        </NeonButton>
-                      )}
-
-                      {grant.websiteUrl && (
-                        <NeonButton 
-                          size="sm" 
-                          variant="ghost"
-                          onClick={() => window.open(grant.websiteUrl, '_blank')}
-                        >
-                          Visit Website
-                          <ExternalLink className="w-4 h-4" />
                         </NeonButton>
                       )}
                     </div>

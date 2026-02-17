@@ -127,6 +127,7 @@ export const useDashboardStore = () => {
 };
 
 // AI Agent Store — API-backed
+// AI Agent Store — API-backed
 export const useAIAgentStore = () => {
   const [agent, setAgent] = useState<any>(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -142,50 +143,37 @@ export const useAIAgentStore = () => {
           `[${l.startedAt || 'N/A'}] ${l.action}: ${l.status} — Found: ${l.grantsFound}, Matched: ${l.grantsMatched}${l.error ? ` Error: ${l.error}` : ''}`
         ));
       }
+      return data;
     } catch (err) {
       console.error('Failed to fetch agent status:', err);
+      return null;
     }
   }, []);
 
+  // Poll based on running state (faster when running)
   useEffect(() => {
     fetchStatus();
-  }, [fetchStatus]);
+    const interval = setInterval(fetchStatus, isRunning ? 2000 : 5000);
+    return () => clearInterval(interval);
+  }, [fetchStatus, isRunning]);
 
   const runAgent = useCallback(async () => {
     setIsRunning(true);
-    setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Starting AI Agent — scanning grant sources...`]);
+    setLogs(prev => [`[${new Date().toLocaleTimeString()}] Requesting agent start...`, ...prev]);
 
     try {
-      await api.agent.run();
-
-      // Poll for completion
-      const steps = [
-        'Connecting to fundsforNGOs...',
-        'Scanning Opportunity Desk...',
-        'Querying Grants.gov API...',
-        'Analyzing eligibility criteria...',
-        'Calculating relevance scores...',
-        'Storing matched opportunities...',
-        'Sending WhatsApp notifications...'
-      ];
-
-      let stepIndex = 0;
-      const interval = setInterval(async () => {
-        if (stepIndex < steps.length) {
-          setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${steps[stepIndex]}`]);
-          stepIndex++;
-        } else {
-          clearInterval(interval);
-          setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Agent completed! Refreshing data...`]);
-          await fetchStatus();
-          setIsRunning(false);
-        }
-      }, 1500);
-
-      return () => clearInterval(interval);
+      const res = await api.agent.run();
+      if (!res.success) {
+        setLogs(prev => [`[${new Date().toLocaleTimeString()}] Error: ${res.error}`, ...prev]);
+        setIsRunning(false);
+        if (res.error === 'Agent is already running') fetchStatus();
+      } else {
+        // Success, the polling effect will handle updates
+        fetchStatus();
+      }
     } catch (err) {
       setIsRunning(false);
-      setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Error: ${err}`]);
+      setLogs(prev => [`[${new Date().toLocaleTimeString()}] Connection Error: ${err}`, ...prev]);
     }
   }, [fetchStatus]);
 

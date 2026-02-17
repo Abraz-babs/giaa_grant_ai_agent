@@ -5,15 +5,15 @@ export function seedDatabase() {
     // --- Users ---
     const existingUsers = dbAll('SELECT id FROM users');
     if (existingUsers.length === 0) {
-        const hash = bcrypt.hashSync('Glisten2026!', 10);
         const users = [
-            { name: 'Zakiyah Zuhair', email: 'zakiyah@glistenacademy.com', role: 'ADMIN', phone: '+2348012345001' },
-            { name: 'Zarah Zuhair', email: 'zarah@glistenacademy.com', role: 'ADMIN', phone: '+2348012345002' },
-            { name: 'Mr. Alabi', email: 'alabi@glistenacademy.com', role: 'MANAGER', phone: '+2348012345003' },
-            { name: 'Amina Bello', email: 'amina@glistenacademy.com', role: 'VIEWER', phone: '+2348012345004' },
-            { name: 'Yusuf Ibrahim', email: 'yusuf@glistenacademy.com', role: 'VIEWER', phone: '+2348012345005' }
+            { name: 'Zakiyah Zuhair', email: 'zakiyah@glisteninternationalacademy.com', pass: 'Zakiyah123!', role: 'ADMIN', phone: '+2348012345001' },
+            { name: 'Zarah Zuhair', email: 'zarah@glisteninternationalacademy.com', pass: 'Zarah123!', role: 'ADMIN', phone: '+2348012345002' },
+            { name: 'Mr. Alabi', email: 'alabi@glisteninternationalacademy.com', pass: 'Alabi123!', role: 'MANAGER', phone: '+2348012345003' },
+            { name: 'Amina Bello', email: 'amina.bello@glisteninternationalacademy.com', pass: 'Amina123!', role: 'VIEWER', phone: '+2348012345004' },
+            { name: 'Yusuf Ibrahim', email: 'yusuf.ibrahim@glisteninternationalacademy.com', pass: 'Yusuf123!', role: 'VIEWER', phone: '+2348012345005' }
         ];
         for (const u of users) {
+            const hash = bcrypt.hashSync(u.pass, 10);
             dbRun('INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)',
                 [u.name, u.email, hash, u.role, u.phone]);
         }
@@ -26,24 +26,78 @@ export function seedDatabase() {
         const profile = {
             id: '1',
             name: 'Glisten International Academy',
-            type: 'K-12 International Academy',
-            location: { address: '15 Innovation Drive', city: 'Abuja', state: 'FCT', country: 'Nigeria', zip: '900001' },
-            contact: { email: 'admin@glistenacademy.com', phone: '+234-801-234-5678', website: 'https://glistenacademy.com' },
-            description: 'A premier K-12 international academy in Nigeria specializing in STEM, AI, and robotics education. We prepare students for global competence through innovative teaching, technology integration, and character-based learning.',
+            type: 'PRIVATE',
+            location: {
+                country: 'Nigeria',
+                state: 'FCT',
+                city: 'Abuja',
+                address: 'Plot 1457, Cadastral Zone B8, Jahi District'
+            },
             establishedYear: 2015,
-            enrollment: { total: 850, grades: 'K-12', internationalStudents: 120 },
-            accreditation: ['Nigerian National Board', 'Cambridge International', 'IB World School Candidate'],
-            programs: [
-                { id: '1', name: 'AI & Machine Learning Lab', category: 'STEM', description: 'Hands-on AI projects for grades 7-12', status: 'ACTIVE' },
-                { id: '2', name: 'Robotics Competition Team', category: 'STEM', description: 'FIRST Robotics and VEX IQ competition prep', status: 'ACTIVE' },
-                { id: '3', name: 'Inclusive Education Initiative', category: 'INCLUSIVE', description: 'Programs for students with diverse learning needs', status: 'ACTIVE' },
-                { id: '4', name: 'Environmental Science Club', category: 'ENVIRONMENT', description: 'Sustainability and climate research projects', status: 'ACTIVE' }
+            studentCount: {
+                total: 850,
+                male: 450,
+                female: 400,
+                specialNeeds: 25
+            },
+            staffCount: {
+                teaching: 65,
+                nonTeaching: 20
+            },
+            facilities: [
+                'Robotics Lab',
+                'AI Research Center',
+                'Modern Library',
+                'Science Laboratories',
+                'Sports Complex',
+                'Digital Arts Studio'
             ],
-            achievements: ['2024 National STEM Innovation Award', 'Top 10 International Schools in West Africa', 'UNESCO Global Education Partnership', '96% university placement rate'],
+            programs: [
+                'Cambridge International',
+                'Nigerian Curriculum',
+                'STEM Initiative',
+                'Coding & AI'
+            ],
+            achievements: [
+                '2024 National STEM Innovation Award',
+                'Top 10 International Schools in West Africa',
+                'UNESCO Global Education Partnership',
+                '96% university placement rate'
+            ],
+            focusAreas: [
+                'Technology & AI',
+                'Character Development',
+                'Global Citizenship',
+                'Academic Excellence'
+            ],
+            registrationDetails: {
+                registrationNumber: 'GIA-2015-001',
+                accreditationStatus: 'Fully Accredited',
+                ngoStatus: false
+            },
+            contactInfo: {
+                email: 'info@glisteninternationalacademy.com',
+                phone: '+234 903 888 2824',
+                website: 'https://glisteninternationalacademy.com'
+            },
             documents: [
-                { id: '1', name: 'School Prospectus 2024', type: 'PDF', category: 'General', uploadDate: '2024-01-15' },
-                { id: '2', name: 'Financial Statements FY2024', type: 'PDF', category: 'Financial', uploadDate: '2024-03-01' },
-                { id: '3', name: 'Accreditation Certificate', type: 'PDF', category: 'Legal', uploadDate: '2024-02-20' }
+                { id: '1', name: 'School Prospectus 2024', type: 'PDF', url: '#', uploadedAt: '2024-01-15', expiresAt: '2025-01-15' },
+                { id: '2', name: 'Accreditation Certificate', type: 'PDF', url: '#', uploadedAt: '2024-02-20' }
+            ],
+            impactStories: [
+                {
+                    id: '1',
+                    title: 'Community Tech Drive',
+                    description: 'Students taught basic computer skills to 200 local community members.',
+                    beneficiaries: 200,
+                    outcome: 'Increased digital literacy',
+                    date: '2023-11-15'
+                }
+            ],
+            strategicGoals: [
+                'Integrate AI into all grade levels by 2026',
+                'Achieve 100% university acceptance rate',
+                'Expand scholarship program for underprivileged students'
             ]
         };
         dbRun('INSERT INTO school_profile (data) VALUES (?)', [JSON.stringify(profile)]);

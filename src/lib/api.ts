@@ -154,8 +154,9 @@ export const api = {
         create: async (grantId: string, title?: string) => {
             if (IS_DEMO) {
                 // Template Generator for Real Grants
-                const getProposalContent = (grantId: string, title: string) => {
+                const getProposalContent = (id: string, title: string) => {
                     const timestamp = new Date().toISOString().split('T')[0];
+                    const grantId = String(id).trim();
 
                     // 1. Tony Elumelu Foundation (Entrepreneurship)
                     if (grantId === '1') {
@@ -335,31 +336,52 @@ Inspiration of 500+ students to pursue STEM careers. A deeper understanding of t
                         ];
                     }
 
-                    // Default Generic Template (Google or others)
+                    // 4. Default / Fallback Template (High Quality)
                     return [
                         {
                             id: '1',
                             title: 'Full Application: ' + title,
-                            content: `## PROJECT TITLE: Enhancing Digital Learning Capabilities
+                            content: `## PROJECT TITLE: Comprehensive Digital Transformation in Education
 Date: ${timestamp}
+Ref: Grant Application (ID: ${grantId})
 
 ## 1. EXECUTIVE SUMMARY
-We are applying for funding to upgrade our digital learning infrastructure. This project aims to integrate cloud-based collaboration tools into our daily curriculum, ensuring that our students are globally competitive digital natives.
+Glisten International Academy (GIA) seeks funding to implement a comprehensive digital transformation initiative. Our goal is to integrate advanced educational technologies into our core curriculum, ensuring every student is prepared for the 4th Industrial Revolution. This project addresses the critical need for digital literacy and collaborative learning environments in secondary education. We propose a phased implementation of smart classroom technology, teacher training, and curriculum enhancement.
 
-## 2. PROJECT DESCRIPTION
-describe the specific hardware and software needs of the school. Focus on how this technology will improve learning outcomes for students with diverse learning needs.
+## 2. INSTITUTIONAL BACKGROUND & CAPACITY
+Established in 2006, GIA has a proven track record of academic excellence in Abuja. With over 1,200 students and a distinction rate of 100%, we are uniquely positioned to serve as a model for educational innovation. Our facilities already include a Robotics Lab and ICT Complex, demonstrating our capacity to manage and sustain technology-focused grants.
 
-## 3. BUDGET
-Total Request: $10,000
-- Hardware: $6,000
-- Software: $2,000
-- Training: $2,000
+## 3. PROBLEM STATEMENT
+Despite our achievements, resource gaps limit our ability to provide equitable access to advanced tools for all students. Current hardware is aging, and software licenses are limited. This creates a disparity in learning outcomes, particularly in specialized STEM subjects. Without external funding, the pace of our technological adoption cannot match the speed of global innovation.
 
-## 4. IMPACT
-We expect to see a 20% improvement in computer literacy scores within one academic year.`,
-                            wordCount: 150,
-                            maxWords: 1000,
-                            aiSuggestions: ['Be more specific about the hardware model', 'Define "globally competitive"']
+## 4. PROJECT OBJECTIVES
+1. **Infrastructure:** To upgrade 3 computer labs with 50 high-performance workstations.
+2. **Pedagogy:** To train 100% of our teaching staff in digital pedagogy and blended learning techniques.
+3. **Curriculum:** To launch a new "Future Skills" module covering coding, data analysis, and digital citizenship.
+
+## 5. METHODOLOGY
+**Needs Assessment:** Conducting a baseline survey of student digital skills.
+**Procurement:** Utilizing competitive bidding to secure cost-effective hardware.
+**Implementation:** Rolling out the new systems in a staged manner, starting with the Senior Secondary arm.
+**Monitoring:** tracking utilization rates and student performance metrics quarterly.
+
+## 6. BUDGET NARRATIVE
+The requested funding will be allocated as follows:
+- **Hardware & Infrastructure (60%):** Procurement of desktops, interactive whiteboards, and networking gear.
+- **Software & Licensing (20%):** Cloud subscriptions for learning management systems (e.g., Google Workspace for Education Plus).
+- **Professional Development (15%):** Workshops and certifications for staff.
+- **Administrative Costs (5%):** Project management and reporting.
+
+## 7. EXPECTED IMPACT
+- **Short Term:** Immediate improvement in student engagement and access to resources.
+- **Medium Term:** Measurable increase in standardized test scores for ICT-related subjects.
+- **Long Term:** Graduation of students who are fully certified in industry-standard digital tools, increasing their employability and university readiness.
+
+## 8. SUSTAINABILITY
+GIA maintains a rigorous maintenance schedule for all assets. Recurring costs such as software subscriptions will be absorbed into the school's annual ICT levy, ensuring the project's longevity beyond the grant period.`,
+                            wordCount: 800,
+                            maxWords: 2000,
+                            aiSuggestions: ['Customize the "Problem Statement" with specific data points', 'Attach the school\'s audited financial statement']
                         }
                     ];
                 };

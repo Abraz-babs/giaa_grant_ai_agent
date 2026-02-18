@@ -263,7 +263,7 @@ export const api = {
 
     agent: {
         status: async () => {
-            if (IS_DEMO) return mockAgent;
+            if (IS_DEMO) return { agent: mockAgent, isRunning: false, logs: [] };
             const res = await fetch(`${API_BASE}/agent/status`, { headers: getHeaders() });
             return handleResponse<any>(res);
         },

@@ -113,7 +113,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
             disabled={!selectedGrant}
             icon={<Sparkles className="w-4 h-4" />}
           >
-            Generate Full Proposal (v2.0)
+            Generate Full Proposal (v2.1)
           </NeonButton>
         </div>
 

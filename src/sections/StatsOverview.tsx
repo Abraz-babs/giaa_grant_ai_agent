@@ -4,12 +4,12 @@ import { HoloCard } from '@/components/HoloCard';
 import { HexagonStat } from '@/components/HexagonStat';
 import { CircularProgress } from '@/components/CircularProgress';
 import type { DashboardStats } from '@/types';
-import { 
-  TrendingUp, 
-  FileText, 
-  Clock, 
-  CheckCircle, 
-  DollarSign, 
+import {
+  TrendingUp,
+  FileText,
+  Clock,
+  CheckCircle,
+  DollarSign,
   AlertTriangle,
   Cpu,
   Target
@@ -53,7 +53,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
           </div>
           <div className="mt-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-neon-green" />
-            <span className="text-xs text-neon-green">+12 this week</span>
+            <span className="text-xs text-neon-green">Active monitoring</span>
           </div>
         </HoloCard>
 
@@ -74,7 +74,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
           </div>
           <div className="mt-3 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
-            <span className="text-xs text-white/50">In progress</span>
+            <span className="text-xs text-white/50">Ready to start</span>
           </div>
         </HoloCard>
 
@@ -116,7 +116,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
           </div>
           <div className="mt-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-neon-green" />
-            <span className="text-xs text-neon-green">+5% from last year</span>
+            <span className="text-xs text-neon-green">Awaiting data</span>
           </div>
         </HoloCard>
       </div>
@@ -130,19 +130,19 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
             AI Intelligence
           </h3>
           <div className="flex justify-around">
-            <HexagonStat 
+            <HexagonStat
               value={stats.aiMatches}
               label="AI Matches"
               color="cyan"
               size="md"
             />
-            <HexagonStat 
+            <HexagonStat
               value={stats.pendingReview}
               label="To Review"
               color="purple"
               size="md"
             />
-            <HexagonStat 
+            <HexagonStat
               value={stats.upcomingDeadlines}
               label="Deadlines"
               color="pink"
@@ -158,7 +158,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
             Performance
           </h3>
           <div className="flex items-center justify-center">
-            <CircularProgress 
+            <CircularProgress
               value={stats.successRate}
               size={140}
               strokeWidth={10}

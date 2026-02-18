@@ -160,14 +160,14 @@ export const mockGrants: Grant[] = [
 ];
 
 export const mockStats: DashboardStats = {
-    totalGrants: 154, // Historical + Current
-    activeApplications: 1, // Matches the 'REVIEWING' status grant
-    pendingReview: 3, // Matches the 'NEW' grants
-    fundedGrants: 2,
-    totalFunding: 55000, // Real previous funding
-    upcomingDeadlines: 2, // TEF and STEM to Space are soon
-    aiMatches: 4, // All 4 are matches
-    successRate: 15
+    totalGrants: 4, // Real current grants
+    activeApplications: 0,
+    pendingReview: 4, // All 4 are new/pending
+    fundedGrants: 0,
+    totalFunding: 0,
+    upcomingDeadlines: 2,
+    aiMatches: 4,
+    successRate: 0
 };
 
 export const mockNotifications: Notification[] = [
@@ -197,5 +197,5 @@ export const mockAgent: AIAgent = {
         autoDraftEnabled: false,
         filteringCriteria: { minAmount: 1000, maxAmount: 1000000, categories: ['STEM', 'EDUCATION_INNOVATION', 'ENTREPRENEURSHIP'], eligibleRegions: ['Africa', 'Nigeria'], deadlineRange: 180 }
     },
-    stats: { totalGrantsFound: 154, totalGrantsFiltered: 42, totalApplicationsSubmitted: 12, totalFundingSecured: 55000, successRate: 15, averageResponseTime: 120 }
+    stats: { totalGrantsFound: 4, totalGrantsFiltered: 0, totalApplicationsSubmitted: 0, totalFundingSecured: 0, successRate: 0, averageResponseTime: 120 }
 };

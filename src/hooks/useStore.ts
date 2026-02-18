@@ -177,6 +177,17 @@ export const useAIAgentStore = () => {
     }
   }, [fetchStatus]);
 
+  const stopAgent = useCallback(async () => {
+    try {
+      await api.agent.stop();
+      setIsRunning(false);
+      setLogs(prev => [`[${new Date().toLocaleTimeString()}] Agent stopped by user`, ...prev]);
+      fetchStatus();
+    } catch (err) {
+      console.error('Failed to stop agent:', err);
+    }
+  }, [fetchStatus]);
+
   const toggleAgent = useCallback(() => {
     if (agent) {
       setAgent((prev: any) => ({
@@ -200,6 +211,7 @@ export const useAIAgentStore = () => {
     isRunning,
     logs,
     runAgent,
+    stopAgent,
     toggleAgent,
     updateConfiguration
   };

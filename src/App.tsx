@@ -80,11 +80,12 @@ function AppContent() {
             </div>
             <div className="flex items-center gap-3">
               <NeonButton
-                onClick={() => aiAgentStore.runAgent()}
-                loading={aiAgentStore.isRunning}
+                onClick={() => aiAgentStore.isRunning ? aiAgentStore.stopAgent() : aiAgentStore.runAgent()}
+                variant={aiAgentStore.isRunning ? "secondary" : "primary"}
                 icon={<RefreshCw className={cn('w-4 h-4', aiAgentStore.isRunning && 'animate-spin')} />}
+                className={cn(aiAgentStore.isRunning && "border-neon-green text-neon-green bg-neon-green/10")}
               >
-                Run Agent Now
+                {aiAgentStore.isRunning ? 'Stop Agent' : 'Run Agent Now'}
               </NeonButton>
             </div>
           </div>
@@ -368,17 +369,20 @@ function AppContent() {
 
       {/* Floating Action Button (Mobile) */}
       <button
-        onClick={() => aiAgentStore.runAgent()}
+        onClick={() => aiAgentStore.isRunning ? aiAgentStore.stopAgent() : aiAgentStore.runAgent()}
         className={cn(
           'fixed bottom-6 right-6 lg:hidden',
           'w-14 h-14 rounded-full',
-          'bg-brand-500 text-white',
+          aiAgentStore.isRunning ? 'bg-red-500 text-white animate-pulse' : 'bg-brand-500 text-white',
           'flex items-center justify-center',
-          'shadow-lg shadow-brand-500/25 transition-transform hover:scale-110',
-          aiAgentStore.isRunning && 'animate-pulse'
+          'shadow-lg shadow-brand-500/25 transition-transform hover:scale-110'
         )}
       >
-        <RefreshCw className={cn('w-6 h-6', aiAgentStore.isRunning && 'animate-spin')} />
+        {aiAgentStore.isRunning ? (
+          <Zap className="w-6 h-6" />
+        ) : (
+          <RefreshCw className="w-6 h-6" />
+        )}
       </button>
     </div>
   );

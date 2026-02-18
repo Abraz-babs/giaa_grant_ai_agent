@@ -61,118 +61,118 @@ export const mockSchoolProfile: SchoolProfile = {
 export const mockGrants: Grant[] = [
     {
         id: '1',
-        name: 'Africa STEM Education Innovation Grant',
-        organization: 'World Bank Education Fund',
-        amount: { min: 50000, max: 250000, currency: 'USD' },
-        deadline: '2026-06-15',
-        description: 'Supporting innovative STEM education models in Sub-Saharan Africa. Matches Glisten\'s focus on robotics and technology integration.',
-        eligibility: ['Registered educational institution', 'STEM programs'],
-        category: 'TECHNOLOGY',
+        name: 'Tony Elumelu Foundation Entrepreneurship Programme 2026',
+        organization: 'Tony Elumelu Foundation',
+        amount: { min: 5000, max: 5000, currency: 'USD' },
+        deadline: '2026-03-01',
+        description: 'A flagship African entrepreneurship program offering $5,000 non-refundable seed capital, mentorship, and business training. Ideal for school-based entrepreneurship initiatives and student ventures.',
+        eligibility: ['African Entrepreneurs', 'Startups 0-3 years', 'Legal Residents of Africa'],
+        category: 'ENTREPRENEURSHIP',
         relevanceScore: 'HIGH',
         status: 'NEW',
-        requirements: ['Project Proposal', 'Budget Breakdown', 'Impact Assessment'],
+        requirements: ['Valid ID', 'Business Idea/Plan', 'Participation in Training'],
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        websiteUrl: 'https://www.worldbank.org/en/topic/education',
-        aiSummary: 'Strong match for Glisten\'s Robotics program. The fund prioritizes scalable STEM models in West Africa.',
+        websiteUrl: 'https://www.tefconnect.com',
+        aiSummary: 'Excellent opportunity for Glisten\'s "Young Entrepreneurs" club or student-led initiatives. Requires a business plan.',
         applicationReadiness: {
-            score: 78,
-            missingRequirements: ['Budget Breakdown'],
-            strengths: ['Robotics Lab Infrastructure', 'Qualified Staff'],
-            recommendations: ['Highlight VEX participation success', 'Detail community impact'],
-            estimatedSuccessRate: 75
+            score: 90,
+            missingRequirements: [],
+            strengths: ['Strong Business Curriculum', 'Student Innovation'],
+            recommendations: ['Register student ventures', 'Prepare pitch decks'],
+            estimatedSuccessRate: 45
         }
     },
     {
         id: '2',
-        name: 'Google AI for Education Grant',
-        organization: 'Google.org',
-        amount: { min: 100000, max: 500000, currency: 'USD' },
-        deadline: '2026-07-31',
-        description: 'Empowering schools to integrate AI and machine learning into their curriculum.',
-        eligibility: ['Existing AI curriculum', 'Underserved students'],
-        category: 'AI_EDUCATION',
+        name: 'African Union Innovating Education in Africa (IEA) 2026',
+        organization: 'African Union',
+        amount: { min: 40000, max: 50000, currency: 'USD' },
+        deadline: '2026-04-15', // Estimated based on typical cycle
+        description: 'Grant funding for innovative solutions that address education challenges in Africa. Supports scalable projects improving access, quality, and relevance of education.',
+        eligibility: ['African Organizations', 'Education Innovators', 'Scalable Models'],
+        category: 'EDUCATION_INNOVATION',
         relevanceScore: 'HIGH',
         status: 'NEW',
-        requirements: ['Curriculum Plan', 'Staff Training Schedule'],
+        requirements: ['Innovation Description', 'Scalability Plan', 'Impact Evidence'],
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        websiteUrl: 'https://www.google.org/our-work/education/',
-        aiSummary: 'Perfect fit for the new AI curriculum expansion. Requires focus on student outcomes.',
+        websiteUrl: 'https://iea.edu-au.org',
+        aiSummary: 'Perfect fit for the "Robotics & AI Center" expansion. Focuses on scalable educational innovations.',
         applicationReadiness: {
             score: 85,
-            missingRequirements: [],
-            strengths: ['AI Curriculum', 'ICT Complex'],
-            recommendations: ['Quantify expected student improvement'],
-            estimatedSuccessRate: 60
+            missingRequirements: ['Impact Evidence Report'],
+            strengths: ['Existing AI Lab', 'Track Record'],
+            recommendations: ['Document student outcomes', 'Partner with Ministry'],
+            estimatedSuccessRate: 30
         }
     },
     {
         id: '3',
-        name: 'UNICEF Inclusive Education Fund',
-        organization: 'UNICEF',
-        amount: { min: 25000, max: 100000, currency: 'USD' },
-        deadline: '2026-05-20',
-        description: 'Supporting inclusive education models that cater to children with special needs.',
-        eligibility: ['K-12 institutions', 'Special needs program'],
-        category: 'INCLUSIVE_EDUCATION',
+        name: 'STEM to Space Scholarship & Grant 2026',
+        organization: 'Opolo Global Innovation',
+        amount: { min: 1000, max: 10000, currency: 'USD' },
+        deadline: '2026-04-02',
+        description: 'Supporting Nigerian students and institutions in STEM fields, specifically targeting space science, technology, and astronomy.',
+        eligibility: ['Nigerian Students/Schools', 'STEM Focus'],
+        category: 'STEM',
         relevanceScore: 'MEDIUM',
         status: 'REVIEWING',
-        requirements: ['Inclusion Strategy', 'Beneficiary Data'],
+        requirements: ['Academic Transcripts', 'Essay', 'Project Description'],
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        websiteUrl: 'https://www.unicef.org/education/inclusive-education',
+        websiteUrl: 'https://scholarsworld.ng/stem-to-space-scholarship', // Link to info page
         applicationReadiness: {
-            score: 65,
-            missingRequirements: ['Detailed Inclusion Strategy'],
-            strengths: ['Special Needs Department'],
-            recommendations: ['Partner with local NGOs'],
+            score: 70,
+            missingRequirements: ['Student Essays'],
+            strengths: ['Physics Department'],
+            recommendations: ['Identify top physics students'],
             estimatedSuccessRate: 40
         }
     },
     {
         id: '4',
-        name: 'USAID Robotics & Innovation',
-        organization: 'USAID',
-        amount: { min: 50000, max: 200000, currency: 'USD' },
-        deadline: '2026-04-30',
-        description: 'Promoting hands-on robotics labs and engineering skills in secondary schools.',
-        eligibility: ['STEM infrastructure', 'Secondary School'],
-        category: 'ROBOTICS',
+        name: 'Google for Education Impact Fund',
+        organization: 'Google.org',
+        amount: { min: 50000, max: 150000, currency: 'USD' },
+        deadline: '2026-08-30',
+        description: 'Funding for nonprofits and schools using technology to close learning gaps.',
+        eligibility: ['Nonprofits', 'Educational Institutions'],
+        category: 'TECHNOLOGY',
         relevanceScore: 'HIGH',
-        status: 'APPLYING',
-        requirements: ['Lab Photos', 'Student Testimonials'],
+        status: 'NEW',
+        requirements: ['Theory of Change', 'Budget', 'Tech Implementation Plan'],
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        websiteUrl: 'https://www.usaid.gov/education',
+        websiteUrl: 'https://www.google.org/our-work/education/',
         applicationReadiness: {
-            score: 92,
-            missingRequirements: [],
-            strengths: ['Existing VEX Lab', 'Award-winning team'],
-            recommendations: ['Video tour of the lab'],
-            estimatedSuccessRate: 85
+            score: 60,
+            missingRequirements: ['Theory of Change Document'],
+            strengths: ['Google Classroom Usage'],
+            recommendations: ['Draft a Theory of Change'],
+            estimatedSuccessRate: 20
         }
     }
 ];
 
 export const mockStats: DashboardStats = {
-    totalGrants: 154,
-    activeApplications: 3,
-    pendingReview: 12,
+    totalGrants: 154, // Historical + Current
+    activeApplications: 1, // Matches the 'REVIEWING' status grant
+    pendingReview: 3, // Matches the 'NEW' grants
     fundedGrants: 2,
-    totalFunding: 75000,
-    upcomingDeadlines: 4,
-    aiMatches: 8,
+    totalFunding: 55000, // Real previous funding
+    upcomingDeadlines: 2, // TEF and STEM to Space are soon
+    aiMatches: 4, // All 4 are matches
     successRate: 15
 };
 
 export const mockNotifications: Notification[] = [
-    { id: '1', type: 'GRANT_FOUND', title: 'New High-Match Grant', message: 'Africa STEM Education Grant found', priority: 'HIGH', read: false, createdAt: new Date().toISOString() },
-    { id: '2', type: 'DEADLINE_ALERT', title: 'Deadline Approaching', message: 'USAID Robotics deadline in 72 days', priority: 'HIGH', read: false, createdAt: new Date().toISOString() }
+    { id: '1', type: 'GRANT_FOUND', title: 'New High-Match Grant', message: 'Tony Elumelu Foundation 2026 is now open!', priority: 'HIGH', read: false, createdAt: new Date().toISOString() },
+    { id: '2', type: 'DEADLINE_ALERT', title: 'Deadline Approaching', message: 'TEF 2026 application closes in 12 days', priority: 'HIGH', read: false, createdAt: new Date().toISOString() }
 ];
 
 export const mockAgent: AIAgent = {
@@ -183,19 +183,19 @@ export const mockAgent: AIAgent = {
     nextRun: new Date(Date.now() + 6 * 3600000).toISOString(),
     tasks: [
         { id: 't1', type: 'DISCOVER', status: 'RUNNING', priority: 'HIGH', createdAt: new Date().toISOString() },
-        { id: 't2', type: 'ANALYZE', status: 'COMPLETED', priority: 'HIGH', createdAt: new Date(Date.now() - 3600000).toISOString(), result: 'Found 4 new matches' },
+        { id: 't2', type: 'ANALYZE', status: 'COMPLETED', priority: 'HIGH', createdAt: new Date(Date.now() - 3600000).toISOString(), result: 'Identified 4 active opportunities' },
         { id: 't3', type: 'FILTER', status: 'PENDING', priority: 'MEDIUM', createdAt: new Date().toISOString() }
     ],
     configuration: {
-        searchKeywords: ['STEM', 'Education', 'Africa', 'Robotics', 'Special Needs'],
+        searchKeywords: ['STEM', 'Education', 'Africa', 'Robotics', 'Special Needs', 'Entrepreneurship'],
         grantSources: [
-            { id: 's1', name: 'Grants.gov', url: 'https://grants.gov', type: 'WEBSITE', isActive: true, lastScraped: new Date().toISOString() },
-            { id: 's2', name: 'Terra Viva Grants', url: 'https://terravivagrants.org', type: 'WEBSITE', isActive: true, lastScraped: new Date().toISOString() },
+            { id: 's1', name: 'TEFConnect', url: 'https://tefconnect.com', type: 'WEBSITE', isActive: true, lastScraped: new Date().toISOString() },
+            { id: 's2', name: 'African Union', url: 'https://au.int', type: 'WEBSITE', isActive: true, lastScraped: new Date().toISOString() },
             { id: 's3', name: 'Google for Education', url: 'https://edu.google.com', type: 'WEBSITE', isActive: true, lastScraped: new Date(Date.now() - 86400000).toISOString() }
         ],
         notificationSettings: { emailEnabled: true, whatsappEnabled: true, digestFrequency: 'DAILY', urgentAlertsEnabled: true, recipients: ['zakiyah@glisten.com'] },
         autoDraftEnabled: false,
-        filteringCriteria: { minAmount: 10000, maxAmount: 1000000, categories: ['STEM', 'TECHNOLOGY'], eligibleRegions: ['Africa'], deadlineRange: 180 }
+        filteringCriteria: { minAmount: 1000, maxAmount: 1000000, categories: ['STEM', 'EDUCATION_INNOVATION', 'ENTREPRENEURSHIP'], eligibleRegions: ['Africa', 'Nigeria'], deadlineRange: 180 }
     },
-    stats: { totalGrantsFound: 1520, totalGrantsFiltered: 450, totalApplicationsSubmitted: 12, totalFundingSecured: 75000, successRate: 18, averageResponseTime: 120 }
+    stats: { totalGrantsFound: 154, totalGrantsFiltered: 42, totalApplicationsSubmitted: 12, totalFundingSecured: 55000, successRate: 15, averageResponseTime: 120 }
 };

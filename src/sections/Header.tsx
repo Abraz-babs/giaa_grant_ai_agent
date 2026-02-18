@@ -8,13 +8,15 @@ interface HeaderProps {
   unreadNotifications: number;
   onMenuClick?: () => void;
   className?: string;
+  user?: any; // Add user prop
 }
 
 export const Header: React.FC<HeaderProps> = ({
   agentStatus,
   unreadNotifications,
   onMenuClick,
-  className
+  className,
+  user
 }) => {
   const statusMap = {
     'ACTIVE': 'active',
@@ -31,13 +33,13 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Left section */}
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={onMenuClick}
             className="lg:hidden p-2 text-white/70 hover:text-neon-cyan transition-colors"
           >
             <Menu className="w-6 h-6" />
           </button>
-          
+
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -48,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-neon-green rounded-full 
                             animate-pulse shadow-[0_0_10px_rgba(0,255,100,0.8)]" />
             </div>
-            
+
             <div className="hidden sm:block">
               <h1 className="font-orbitron text-lg font-bold text-white tracking-wider">
                 GIAA <span className="text-neon-cyan">AI</span>
@@ -63,8 +65,8 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Center section - Agent Status */}
         <div className="hidden md:flex items-center gap-4">
           <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-dark-panel/50 border border-neon-cyan/20">
-            <StatusIndicator 
-              status={statusMap[agentStatus]} 
+            <StatusIndicator
+              status={statusMap[agentStatus]}
               size="sm"
               pulse={agentStatus === 'ACTIVE'}
             />
@@ -103,11 +105,11 @@ export const Header: React.FC<HeaderProps> = ({
           {/* User */}
           <div className="flex items-center gap-2 pl-3 border-l border-white/10">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan/30 to-neon-purple/30 
-                          border border-neon-cyan/50 flex items-center justify-center">
+                            border border-neon-cyan/50 flex items-center justify-center">
               <User className="w-4 h-4 text-neon-cyan" />
             </div>
             <span className="hidden lg:block text-sm font-rajdhani text-white/70">
-              Director
+              {user?.role || 'Guest'}
             </span>
           </div>
         </div>

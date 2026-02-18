@@ -335,6 +335,7 @@ function AppContent() {
         agentStatus={aiAgentStore.agent?.status || 'ACTIVE'}
         unreadNotifications={notificationsStore.unreadCount}
         onMenuClick={() => setSidebarOpen(true)}
+        user={user}
       />
 
       {/* Sidebar */}

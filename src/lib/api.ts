@@ -1,4 +1,4 @@
-import { mockUser, mockGrants, mockStats, mockNotifications, mockSchoolProfile, mockAgent } from './mockData';
+import { mockUser, mockUsers, mockGrants, mockStats, mockNotifications, mockSchoolProfile, mockAgent } from './mockData';
 import type { Proposal } from '../types';
 
 const API_BASE = '/api';
@@ -57,8 +57,11 @@ export const api = {
             try {
                 if (IS_DEMO) {
                     await delay(800);
-                    // Accept any password for demo simplicity, or the specific ones
-                    return { token: 'demo-token-123', user: mockUser };
+                    // Find user by email (case-insensitive)
+                    const normalizedEmail = email.toLowerCase();
+                    const foundUser = mockUsers.find(u => u.email.toLowerCase() === normalizedEmail) || mockUsers[0];
+
+                    return { token: `demo-token-${foundUser.id}`, user: foundUser };
                 }
                 const res = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
@@ -85,7 +88,7 @@ export const api = {
             return handleResponse<{ user: any }>(res);
         },
         getUsers: async () => {
-            if (IS_DEMO) return [mockUser];
+            if (IS_DEMO) return mockUsers;
             const res = await fetch(`${API_BASE}/auth/users`, { headers: getHeaders() });
             return handleResponse<any[]>(res);
         },

@@ -2,15 +2,55 @@ import type { Grant, Notification, DashboardStats, User, SchoolProfile, AIAgent 
 
 // ... (imports remain)
 
-export const mockUser: User = {
-    id: '1',
-    name: 'Zakiyah Zuhair',
-    email: 'zakiyah@glisteninternationalacademy.com',
-    role: 'ADMIN',
-    permissions: ['ALL'],
-    lastLogin: new Date().toISOString(),
-    createdAt: new Date().toISOString()
-};
+export const mockUsers: User[] = [
+    {
+        id: '1',
+        name: 'Zakiyah Zuhair',
+        email: 'zakiyah@glisteninternationalacademy.com',
+        role: 'ADMIN',
+        permissions: ['ALL'],
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    },
+    {
+        id: '2',
+        name: 'Zarah Zuhair',
+        email: 'zarah@glisteninternationalacademy.com',
+        role: 'ADMIN',
+        permissions: ['ALL'],
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    },
+    {
+        id: '3',
+        name: 'Mr. Alabi',
+        email: 'alabi@glisteninternationalacademy.com',
+        role: 'MANAGER',
+        permissions: ['GRANTS_READ', 'GRANTS_WRITE', 'PROPOSALS_READ'],
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    },
+    {
+        id: '4',
+        name: 'Amina Bello',
+        email: 'amina.bello@glisteninternationalacademy.com',
+        role: 'VIEWER',
+        permissions: ['GRANTS_READ'],
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    },
+    {
+        id: '5',
+        name: 'Yusuf Ibrahim',
+        email: 'yusuf.ibrahim@glisteninternationalacademy.com',
+        role: 'VIEWER',
+        permissions: ['GRANTS_READ'],
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    }
+];
+
+export const mockUser = mockUsers[0];
 
 export const mockSchoolProfile: SchoolProfile = {
     id: '1',

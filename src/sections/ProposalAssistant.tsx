@@ -234,9 +234,9 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                                     )
                                   });
                                 }}
-                                className="w-full h-32 bg-dark-panel/50 border border-white/10 rounded-lg
-                                         text-white p-3 focus:outline-none focus:border-neon-cyan
-                                         resize-none font-rajdhani"
+                                className="w-full min-h-[600px] bg-dark-panel/50 border border-white/10 rounded-lg
+                                         text-white p-4 focus:outline-none focus:border-neon-cyan
+                                         resize-y font-rajdhani leading-relaxed"
                               />
 
                               {/* AI Suggestions */}

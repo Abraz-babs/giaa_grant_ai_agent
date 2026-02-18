@@ -1,5 +1,5 @@
 import { mockUser, mockGrants, mockStats, mockNotifications, mockSchoolProfile, mockAgent } from './mockData';
-import type { Grant, Proposal } from '@/types';
+import type { Proposal } from '../types';
 
 const API_BASE = '/api';
 

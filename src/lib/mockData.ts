@@ -1,4 +1,4 @@
-import type { Grant, Notification, DashboardStats, User, SchoolProfile, AIAgent } from '@/types';
+import type { Grant, Notification, DashboardStats, User, SchoolProfile, AIAgent } from '../types';
 
 export const mockUser: User = {
     id: '1',

@@ -158,70 +158,67 @@ export const api = {
                     const timestamp = new Date().toISOString().split('T')[0];
                     const grantId = String(id).trim();
 
+
                     // 1. Tony Elumelu Foundation (Entrepreneurship)
                     if (grantId === '1') {
                         return [
                             {
                                 id: '1',
                                 title: 'Full Application: ' + title,
-                                content: `## PROJECT TITLE: Glisten International Academy Student Entrepreneurship Incubator (SEI)
-Date: ${timestamp}
+                                content: `PROJECT TITLE: Glisten International Academy Student Entrepreneurship Incubator (SEI)
+DATE: ${timestamp}
 
-## 1. EXECUTIVE SUMMARY
+1. EXECUTIVE SUMMARY
 Glisten International Academy (GIA) proposes the establishment of a "Student Entrepreneurship Incubator" (SEI) to empower young minds with the skills, mindset, and resources needed to launch sustainable ventures. Leveraging the Tony Elumelu Foundation's mission to democratize luck and create jobs, this initiative targets 50 high-potential students annually. The SEI will provide a structured curriculum, seed funding simulations, and mentorship from local business leaders. We seek $5,000 to procure training materials, invite expert facilitators, and provide micro-grants for student prototypes. This project aligns with the TEF's goal of fostering African prosperity by nurturing the next generation of business leaders at the secondary school level.
 
-## 2. STATEMENT OF NEED / PROBLEM STATEMENT
+2. STATEMENT OF NEED / PROBLEM STATEMENT
 Youth unemployment in Nigeria stands at over 40%, often due to a disconnect between academic training and market realities. Secondary education rarely offers practical exposure to business creation. GIA students are innovative but lack the structured guidance to transform ideas into viable businesses. Without early intervention, these potential job creators may join the labor market as job seekers. There is a critical need for a hands-on, mentorship-driven platform within the school environment to bridge this gap.
 
-## 3. PROJECT GOALS AND OBJECTIVES
-**Goal:** To instill an entrepreneurial mindset in GIA students and launch 5 viable student-led ventures within 12 months.
-**Objectives:**
+3. PROJECT GOALS AND OBJECTIVES
+GOAL: To instill an entrepreneurial mindset in GIA students and launch 5 viable student-led ventures within 12 months.
+
+OBJECTIVES:
 1. Train 50 students in business ideation, financial literacy, and marketing by Q3 2026.
 2. Facilitate mentorship pairings with 10 successful local entrepreneurs.
 3. Host a "Shark Tank" style pitch competition where top ideas receive prototype funding.
 4. Integrate the TEFConnect digital curriculum into the school's Economics and Business Studies syllabus.
 
-## 4. PROJECT METHODOLOGY & IMPLEMENTATION PLAN
-**Phase 1: Mobilization (Month 1-2)**
-- Recruitment of 50 students via essay application.
-- Orientation for parents and staff.
-- Partnership formation with local hubs (e.g., Abuja Enterprise Agency).
+4. PROJECT METHODOLOGY & IMPLEMENTATION PLAN
+PHASE 1: MOBILIZATION (Month 1-2)
+Recruitment of 50 students via essay application. Orientation for parents and staff. Partnership formation with local hubs (e.g., Abuja Enterprise Agency).
 
-**Phase 2: Training & Workshops (Month 3-6)**
-- Weekly 2-hour workshops using the TEF Toolkit. topics include: Market Research, Business Model Canvas, and Digital Marketing.
-- Guest lectures from TEF Alumni.
+PHASE 2: TRAINING & WORKSHOPS (Month 3-6)
+Weekly 2-hour workshops using the TEF Toolkit. Topics include: Market Research, Business Model Canvas, and Digital Marketing. Guest lectures from TEF Alumni to inspire students.
 
-**Phase 3: Incubation & Mentorship (Month 7-9)**
-- Students form teams and develop business plans.
-- Mentors assigned to each team for bi-weekly guidance.
-- "Glisten Market Day" where teams test products with real customers (parents/teachers).
+PHASE 3: INCUBATION & MENTORSHIP (Month 7-9)
+Students form teams and develop business plans. Mentors assigned to each team for bi-weekly guidance. "Glisten Market Day" where teams test products with real customers (parents/teachers) to validate their business models.
 
-**Phase 4: Pitch Competition & Launch (Month 10)**
-- Final pitch event judged by external experts.
-- Awarding of seed capital (from the grant) to top 3 teams.
+PHASE 4: PITCH COMPETITION & LAUNCH (Month 10)
+Final pitch event judged by external experts. Awarding of seed capital (from the grant) to top 3 teams to formally register and launch their businesses.
 
-## 5. EXPECTED OUTCOMES & IMPACT EVALUATION
-**Outcomes:**
-- 50 students certified in Entrepreneurship Basics.
-- 10 functional business prototypes developed (e.g., recycling services, apps, handmade crafts).
-- 5 student ventures generated revenue during Market Day.
-**Evaluation Metrics:**
-- Pre- and post-training surveys measuring confidence and knowledge.
-- Number of business plans completed.
-- Revenue generated by student businesses.
+5. EXPECTED OUTCOMES & IMPACT EVALUATION
+OUTCOMES:
+50 students certified in Entrepreneurship Basics.
+10 functional business prototypes developed (e.g., recycling services, apps, handmade crafts).
+5 student ventures generated revenue during Market Day.
 
-## 6. BUDGET NARRATIVE (Total Request: $5,000)
-1. **Training Materials ($1,000):** Workbooks, stationery, and access to paid online business simulations.
-2. **Facilitator Honorariums ($1,500):** Stipends for visiting experts and workshop leads over 6 months.
-3. **Micro-Grant Pool ($2,000):** Seed funding awarded to the top 3 winning student teams ($1,000 / $600 / $400) to launch their ideas.
-4. **Market Day Logistics ($500):** Stalls, marketing materials, and event setup.
+EVALUATION METRICS:
+Pre- and post-training surveys measuring confidence and knowledge.
+Number of business plans completed.
+Revenue generated by student businesses.
 
-## 7. SUSTAINABILITY PLAN
+6. BUDGET NARRATIVE (Total Request: $5,000)
+1. Training Materials ($1,000): Workbooks, stationery, and access to paid online business simulations.
+2. Facilitator Honorariums ($1,500): Stipends for visiting experts and workshop leads over 6 months.
+3. Micro-Grant Pool ($2,000): Seed funding awarded to the top 3 winning student teams ($1,000 / $600 / $400) to launch their ideas.
+4. Market Day Logistics ($500): Stalls, marketing materials, and event setup.
+
+7. SUSTAINABILITY PLAN
 The SEI is designed to be self-sustaining. Profits from the "Glisten Market Day" (10% levy on student sales) will be reinvested into the Micro-Grant Pool for the next cohort. Furthermore, GIA commits to budget 5% of its annual extracurricular fund to maintain the program. We will also leverage the TEF Alumni network for continued non-monetary support.
 
-## 8. CONCLUSION
+8. CONCLUSION
 Investing in GIA's Student Entrepreneurship Incubator is an investment in Nigeria's future economic engine. By catching these minds young, we are not just teaching business; we are building a culture of self-reliance and innovation. We eagerly await the opportunity to partner with the Tony Elumelu Foundation.`,
-                                wordCount: 850,
+                                wordCount: 950,
                                 maxWords: 2000,
                                 aiSuggestions: ['Include specific examples of past student projects', 'Mention the specific TEF 7 Pillars']
                             }
@@ -234,153 +231,185 @@ Investing in GIA's Student Entrepreneurship Incubator is an investment in Nigeri
                             {
                                 id: '1',
                                 title: 'Full Application: ' + title,
-                                content: `## PROJECT TITLE: Scalable Robotics & AI Integration Model for West African Schools
-Date: ${timestamp}
+                                content: `PROJECT TITLE: Scalable Robotics & AI Integration Model for West African Schools
+DATE: ${timestamp}
 
-## 1. EXECUTIVE SUMMARY
+1. EXECUTIVE SUMMARY
 Glisten International Academy (GIA), a pioneer in STEM education within Abuja, submits this proposal to the African Union's Innovating Education in Africa (IEA) program. We propose to scale our successful VEX Robotics curriculum into a "Hub-and-Spoke" model that benefits underserved public schools. Our project, "Tech-Share Africa," aims to train 100 teachers and provide access to our robotics labs for 500 external students. We request $50,000 to upgrade our facilities into a Regional Training Center and fund the outreach logistics. This aligns with the CESA 16-25 objective of expanding STEM access.
 
-## 2. STATEMENT OF NEED
+2. STATEMENT OF NEED
 While the demand for digital skills in Africa is exploding, infrastructure in secondary schools lags behind. Most schools in the FCT lack functional computer labs, let alone robotics equipment. There is a "digital divide" where only private school students access future-ready skills. Existing government interventions are often one-off and lack continuity. There is an urgent need for a sustainable, school-to-school mentorship model where well-equipped institutions support their neighbors.
 
-## 3. PROJECT GOALS
-**Goal:** To establish GIA as a Regional STEM Hub that democratizes access to robotics education for 10 partner schools.
-**Objectives:**
+3. PROJECT GOALS
+GOAL: To establish GIA as a Regional STEM Hub that democratizes access to robotics education for 10 partner schools.
+
+OBJECTIVES:
 1. Upgrade the GIA ICT Complex with 20 advanced AI workstations by Q2 2026.
 2. Develop a "Mobile Robotics Lab" curriculum adaptable for low-resource settings.
 3. Train 100 public school teachers in basic coding and robotics instruction.
 4. Host the first "FCT Interschool Robotics League" to foster community and competition.
 
-## 4. IMPLEMENTATION STRATEGY
-**Phase 1: Infrastructure & Curriculum (Months 1-3)**
-- Procurement of additional VEX kits and AI-capable PCs.
-- Developing the open-source "Tech-Share" teacher manual.
+4. IMPLEMENTATION STRATEGY
+PHASE 1: INFRASTRUCTURE & CURRICULUM (Months 1-3)
+Procurement of additional VEX kits and AI-capable PCs. Developing the open-source "Tech-Share" teacher manual.
 
-**Phase 2: Train-the-Trainer (Months 4-6)**
-- Hosting 3-day innovative bootcamps for teachers from partner public schools.
-- Focus on scratch programming and assembling simple robots using local materials.
+PHASE 2: TRAIN-THE-TRAINER (Months 4-6)
+Hosting 3-day innovative bootcamps for teachers from partner public schools. Focus on scratch programming and assembling simple robots using local materials.
 
-**Phase 3: The Mobile Lab (Months 7-12)**
-- GIA students (as peer mentors) travel with staff to partner schools twice a month.
-- Conducting practical sessions using the mobile kits.
+PHASE 3: THE MOBILE LAB (Months 7-12)
+GIA students (as peer mentors) travel with staff to partner schools twice a month. Conducting practical sessions using the mobile kits.
 
-**Phase 4: Assessment & Showcase (Month 12)**
-- A regional exhibition showcasing projects from all 10 schools.
-- Evaluation report submitted to the AU commissions.
+PHASE 4: ASSESSMENT & SHOWCASE (Month 12)
+A regional exhibition showcasing projects from all 10 schools. Evaluation report submitted to the AU commissions.
 
-## 5. IMPACT & SCALABILITY
-**Impact:**
-- Direct training of 600 individuals (100 teachers, 500 students).
-- Creation of a local community of practice for STEM educators.
-**Scalability:**
-- The "Hub-and-Spoke" model is highly replicable. Once proven, other private schools in Lagos, Accra, and Nairobi can adopt the "Tech-Share" framework. We will publish a blueprint for this model.
+5. IMPACT & SCALABILITY
+IMPACT:
+Direct training of 600 individuals (100 teachers, 500 students).
+Creation of a local community of practice for STEM educators.
 
-## 6. BUDGET NARRATIVE ($50,000)
-1. **Hardware Upgrade ($25,000):** VEX V5 Competition Super Kits, 15 High-Performance Laptops, 3D Printers.
-2. **Mobile Lab Logistics ($10,000):** Transportation bus rental for 1 year, fuel, and driver.
-3. **Training Costs ($10,000):** Facilitation fees, printing of manuals, feeding for 100 teachers during workshops.
-4. **Monitoring & Evaluation ($5,000):** Data collection tools, independent audit, final reporting.
+SCALABILITY:
+The "Hub-and-Spoke" model is highly replicable. Once proven, other private schools in Lagos, Accra, and Nairobi can adopt the "Tech-Share" framework. We will publish a blueprint for this model.
 
-## 7. SUSTAINABILITY
+6. BUDGET NARRATIVE ($50,000)
+1. Hardware Upgrade ($25,000): VEX V5 Competition Super Kits, 15 High-Performance Laptops, 3D Printers.
+2. Mobile Lab Logistics ($10,000): Transportation bus rental for 1 year, fuel, and driver.
+3. Training Costs ($10,000): Facilitation fees, printing of manuals, feeding for 100 teachers during workshops.
+4. Monitoring & Evaluation ($5,000): Data collection tools, independent audit, final reporting.
+
+7. SUSTAINABILITY
 Post-grant, the project will be sustained by charging a nominal participation fee for private schools entering the Robotics League, which will subsidize the public school program. Additionally, GIA sees this as part of its CSR and marketing strategy, ensuring long-term institutional commitment.
 
-## 8. CONCLUSION
+8. CONCLUSION
 The African Union's vision for 2063 relies on a skilled youth populace. By empowering Glisten International Academy to share its resources, you are not just funding a school; you are igniting a movement. We are ready to lead the charge in STEM democratization.`,
-                                wordCount: 920,
+                                wordCount: 980,
                                 maxWords: 2500,
                                 aiSuggestions: ['Highlight the specific AU Agenda 2063 goals', 'Detail the criteria for selecting partner schools']
                             }
                         ];
                     }
 
-                    // 3. STEM to Space (Opolo Global)
+                    // 3. STEM to Space
                     if (grantId === '3') {
                         return [
                             {
                                 id: '1',
                                 title: 'Full Application: ' + title,
-                                content: `## PROJECT TITLE: "Reach for the Stars" - Astronomy & Physics Excellence Program
-Date: ${timestamp}
+                                content: `PROJECT TITLE: "Reach for the Stars" - Astronomy & Physics Excellence Program
+DATE: ${timestamp}
 
-## 1. APPLICANT DETAILS
-**Name:** Glisten International Academy
-**Department:** Physics & Geography Department
-**Contact:** Zakiyah Zuhair (Director)
+1. APPLICANT DETAILS
+Name: Glisten International Academy
+Department: Physics & Geography Department
+Contact: Zakiyah Zuhair (Director)
 
-## 2. ACADEMIC EXCELLENCE & TRACK RECORD
+2. ACADEMIC EXCELLENCE & TRACK RECORD
 Glisten International Academy has consistently led the region in science innovation. In 2024, our Physics team placed 2nd in the National Olympiad. Our "Space Club" actively tracks satellite movements using basic telescopic equipment. We have a dedicated cohort of 20 students specifically interested in Aerospace Engineering. This scholarship/grant would provide the crucial push needed to transition from theoretical study to practical observation.
 
-## 3. PROPOSED PROJECT: THE GLISTEN OBSERVATORY
+3. PROPOSED PROJECT: THE GLISTEN OBSERVATORY
 We propose to use the Opolo Global "STEM to Space" funding to establish a rooftop mini-observatory. This facility will not only serve our students but will be open to the community for events like lunar eclipses.
-**Key Components:**
+
+KEY COMPONENTS:
 - Procurement of a Celestron NexStar 8SE Telescope.
 - A subscription to remote observatory data feeds.
 - Guest lectures from NASRDA (National Space Research and Development Agency) engineers.
 
-## 4. ESSAY: WHY SPACE MATTERS TO AFRICA
-*(Draft for Student Submission)*: "Space technology is often viewed as a luxury for developed nations, but for Africa, it is a necessity. From agricultural monitoring (using satellite NDVI data) to tele-medicine in rural areas, space tech solves earthly problems. At Glisten, we want to be part of the generation that designs Nigeria's next satellite. This grant will help us master the fundamentals of orbital mechanics and astrophysics..."
+4. ESSAY: WHY SPACE MATTERS TO AFRICA
+(Draft for Student Submission): "Space technology is often viewed as a luxury for developed nations, but for Africa, it is a necessity. From agricultural monitoring (using satellite NDVI data) to tele-medicine in rural areas, space tech solves earthly problems. At Glisten, we want to be part of the generation that designs Nigeria's next satellite. This grant will help us master the fundamentals of orbital mechanics and astrophysics..."
 
-## 5. BUDGET BREAKDOWN ($1,000 - $10,000)
-- Telescope & Mount: $2,500
-- Solar Filters & Lenses: $500
-- Educational Software Licenses: $500
-- Field Trip to NASRDA Center: $1,000
-**Total:** $4,500
+5. BUDGET BREAKDOWN ($1,000 - $10,000)
+Telescope & Mount: $2,500
+Solar Filters & Lenses: $500
+Educational Software Licenses: $500
+Field Trip to NASRDA Center: $1,000
+Total: $4,500
 
-## 6. EXPECTED OUTCOME
+6. EXPECTED OUTCOME
 Inspiration of 500+ students to pursue STEM careers. A deeper understanding of the universe among our student body.`,
-                                wordCount: 450,
+                                wordCount: 500,
                                 maxWords: 1000,
                                 aiSuggestions: ['Include a letter of recommendation from the Physics HOD', 'Mention specific NASRDA contacts if known']
                             }
                         ];
                     }
 
-                    // 4. Default / Fallback Template (High Quality)
+                    // 4. Default / Fallback Template (High Quality & Plain Text)
                     return [
                         {
                             id: '1',
                             title: 'Full Application: ' + title,
-                            content: `## PROJECT TITLE: Comprehensive Digital Transformation in Education
-Date: ${timestamp}
-Ref: Grant Application (ID: ${grantId})
+                            content: `PROJECT TITLE: Comprehensive Digital Transformation in Education
+DATE: ${timestamp}
+REF: Grant Application (ID: ${grantId || 'N/A'})
 
-## 1. EXECUTIVE SUMMARY
+1. EXECUTIVE SUMMARY
 Glisten International Academy (GIA) seeks funding to implement a comprehensive digital transformation initiative. Our goal is to integrate advanced educational technologies into our core curriculum, ensuring every student is prepared for the 4th Industrial Revolution. This project addresses the critical need for digital literacy and collaborative learning environments in secondary education. We propose a phased implementation of smart classroom technology, teacher training, and curriculum enhancement.
 
-## 2. INSTITUTIONAL BACKGROUND & CAPACITY
-Established in 2006, GIA has a proven track record of academic excellence in Abuja. With over 1,200 students and a distinction rate of 100%, we are uniquely positioned to serve as a model for educational innovation. Our facilities already include a Robotics Lab and ICT Complex, demonstrating our capacity to manage and sustain technology-focused grants.
+2. INSTITUTIONAL BACKGROUND & CAPACITY
+Established in 2006, GIA has a proven track record of academic excellence in Abuja. With over 1,200 students and a distinction rate of 100%, we are uniquely positioned to serve as a model for educational innovation. Our facilities already include a Robotics Lab and ICT Complex, demonstrating our capacity to manage and sustain technology-focused grants. We have successfully managed previous partnerships with local NGOs and educational bodies.
 
-## 3. PROBLEM STATEMENT
-Despite our achievements, resource gaps limit our ability to provide equitable access to advanced tools for all students. Current hardware is aging, and software licenses are limited. This creates a disparity in learning outcomes, particularly in specialized STEM subjects. Without external funding, the pace of our technological adoption cannot match the speed of global innovation.
+3. PROBLEM STATEMENT
+Despite our achievements, resource gaps limit our ability to provide equitable access to advanced tools for all students. Current hardware is aging, and software licenses are limited. This creates a disparity in learning outcomes, particularly in specialized STEM subjects. Without external funding, the pace of our technological adoption cannot match the speed of global innovation. Specifically, our current student-to-computer ratio is 5:1, which impedes personalized learning.
 
-## 4. PROJECT OBJECTIVES
-1. **Infrastructure:** To upgrade 3 computer labs with 50 high-performance workstations.
-2. **Pedagogy:** To train 100% of our teaching staff in digital pedagogy and blended learning techniques.
-3. **Curriculum:** To launch a new "Future Skills" module covering coding, data analysis, and digital citizenship.
+4. PROJECT OBJECTIVES
+1. Infrastructure: To upgrade 3 computer labs with 50 high-performance workstations by the end of 2026.
+2. Pedagogy: To train 100% of our teaching staff in digital pedagogy and blended learning techniques.
+3. Curriculum: To launch a new "Future Skills" module covering coding, data analysis, and digital citizenship.
+4. Equity: To ensure 100% of scholarship students have access to take-home digital devices.
 
-## 5. METHODOLOGY
-**Needs Assessment:** Conducting a baseline survey of student digital skills.
-**Procurement:** Utilizing competitive bidding to secure cost-effective hardware.
-**Implementation:** Rolling out the new systems in a staged manner, starting with the Senior Secondary arm.
-**Monitoring:** tracking utilization rates and student performance metrics quarterly.
+5. METHODOLOGY
+NEEDS ASSESSMENT:
+Conducting a baseline survey of student digital skills to identify specific gaps.
+proCUREMENT:
+Utilizing competitive bidding to secure cost-effective hardware from certified vendors.
+IMPLEMENTATION:
+Rolling out the new systems in a staged manner, starting with the Senior Secondary arm (SS1-SS3) before expanding to Junior Secondary.
+MONITORING:
+Tracking utilization rates and student performance metrics quarterly. A designated project manager will oversee the deployment.
 
-## 6. BUDGET NARRATIVE
+6. BUDGET NARRATIVE
 The requested funding will be allocated as follows:
-- **Hardware & Infrastructure (60%):** Procurement of desktops, interactive whiteboards, and networking gear.
-- **Software & Licensing (20%):** Cloud subscriptions for learning management systems (e.g., Google Workspace for Education Plus).
-- **Professional Development (15%):** Workshops and certifications for staff.
-- **Administrative Costs (5%):** Project management and reporting.
 
-## 7. EXPECTED IMPACT
-- **Short Term:** Immediate improvement in student engagement and access to resources.
-- **Medium Term:** Measurable increase in standardized test scores for ICT-related subjects.
-- **Long Term:** Graduation of students who are fully certified in industry-standard digital tools, increasing their employability and university readiness.
+A. HARDWARE & INFRASTRUCTURE (60%)
+- Procurement of 50 Desktop Computers (Core i5, 16GB RAM).
+- Installation of 5 Interactive Whiteboards.
+- Networking gear (Routers, Switches, Cabling).
 
-## 8. SUSTAINABILITY
-GIA maintains a rigorous maintenance schedule for all assets. Recurring costs such as software subscriptions will be absorbed into the school's annual ICT levy, ensuring the project's longevity beyond the grant period.`,
-                            wordCount: 800,
-                            maxWords: 2000,
+B. SOFTWARE & LICENSING (20%)
+- Cloud subscriptions for learning management systems (e.g., Google Workspace for Education Plus).
+- Anti-virus and security software for 2 years.
+
+C. PROFESSIONAL DEVELOPMENT (15%)
+- 3-day intensive workshop for 80 staff members.
+- Certification fees for "Google Certified Educator" exams.
+
+D. ADMINISTRATIVE COSTS (5%)
+- Project management stipends.
+- Reporting and auditing fees.
+
+7. EXPECTED IMPACT
+SHORT TERM:
+Immediate improvement in student engagement and access to resources. Reduction in student-to-computer ratio to 2:1.
+
+MEDIUM TERM:
+Measurable increase in standardized test scores for ICT-related subjects. 100% of staff certified in basic digital competencies.
+
+LONG TERM:
+Graduation of students who are fully certified in industry-standard digital tools, increasing their employability and university readiness. Establishment of GIA as a regional center for digital excellence.
+
+8. SUSTAINABILITY
+GIA maintains a rigorous maintenance schedule for all assets. Recurring costs such as software subscriptions will be absorbed into the school's annual ICT levy, ensuring the project's longevity beyond the grant period. We also have a dedicated IT support team on staff to handle routine maintenance and repairs.
+
+9. EVALUATION PLAN
+We will define clear Key Performance Indicators (KPIs) at the start of the project. Data will be collected through:
+- Usage logs from the computer labs.
+- Termly assessment results.
+- Annual stakeholder surveys (parents, students, teachers).
+A final report will be submitted to the grantor 12 months post-disbursement.
+
+10. CONCLUSION
+This grant represents a pivotal opportunity for Glisten International Academy to leapfrog into the future of education. We are committed to transparency, excellence, and impact. We thank you for considering our proposal.`,
+                            wordCount: 1100,
+                            maxWords: 2500,
                             aiSuggestions: ['Customize the "Problem Statement" with specific data points', 'Attach the school\'s audited financial statement']
                         }
                     ];

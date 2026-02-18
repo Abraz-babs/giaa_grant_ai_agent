@@ -99,7 +99,7 @@ export const mockGrants: Grant[] = [
         documents: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        websiteUrl: 'https://au.int/en/iea',
+        websiteUrl: 'https://edu-au.org/innovating-education',
         aiSummary: 'Perfect fit for the "Robotics & AI Center" expansion. Focuses on scalable educational innovations.',
         applicationReadiness: {
             score: 85,

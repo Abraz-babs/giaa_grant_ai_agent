@@ -16,6 +16,13 @@ console.log(' [DEBUG] API Initialization:', {
     IS_DEMO
 });
 
+// Mock Agent State for continuous loop simulation
+let demoAgentState = {
+    isRunning: false,
+    logs: [] as any[],
+    lastLogTime: 0
+};
+
 function getToken(): string | null {
     return localStorage.getItem('giaa_token');
 }
@@ -494,14 +501,63 @@ This grant represents a pivotal opportunity for Glisten International Academy to
 
     agent: {
         status: async () => {
-            if (IS_DEMO) return { agent: mockAgent, isRunning: false, logs: [] };
+            if (IS_DEMO) {
+                // Simulate continuous activity if running
+                if (demoAgentState.isRunning) {
+                    const now = Date.now();
+                    // Add a new log entry every 3 seconds to simulate activity
+                    if (now - demoAgentState.lastLogTime > 3000) {
+                        const actions = [
+                            { action: 'SCANNING', detail: 'Scanning African Union Education Portal...' },
+                            { action: 'ANALYZING', detail: 'Processing 45 new grant entries...' },
+                            { action: 'FILTERING', detail: 'Matching eligibility against School Profile...' },
+                            { action: 'CONNECTING', detail: 'Verifying source connectivity...' },
+                            { action: 'DISCOVERING', detail: 'Found potential match: STEM Education Fund' }
+                        ];
+                        const randomEvent = actions[Math.floor(Math.random() * actions.length)];
+
+                        demoAgentState.logs.unshift({
+                            startedAt: new Date().toISOString(),
+                            action: randomEvent.action,
+                            status: 'COMPLETED',
+                            grantsFound: Math.floor(Math.random() * 3),
+                            grantsMatched: Math.floor(Math.random() * 1),
+                            error: null
+                        });
+
+                        // Keep log size manageable
+                        if (demoAgentState.logs.length > 50) demoAgentState.logs.pop();
+                        demoAgentState.lastLogTime = now;
+                    }
+                }
+
+                return {
+                    agent: {
+                        ...mockAgent,
+                        status: demoAgentState.isRunning ? 'ACTIVE' : 'IDLE',
+                        lastRun: new Date().toISOString()
+                    },
+                    isRunning: demoAgentState.isRunning,
+                    logs: demoAgentState.logs
+                };
+            }
             const res = await fetch(`${API_BASE}/agent/status`, { headers: getHeaders() });
             return handleResponse<any>(res);
         },
         run: async () => {
             if (IS_DEMO) {
-                await delay(2000);
-                return { success: true, message: 'Agent run simulated' };
+                if (!demoAgentState.isRunning) {
+                    demoAgentState.isRunning = true;
+                    demoAgentState.logs.unshift({
+                        startedAt: new Date().toISOString(),
+                        action: 'SYSTEM',
+                        status: 'STARTED',
+                        grantsFound: 0,
+                        grantsMatched: 0,
+                        error: null
+                    });
+                }
+                return { success: true, message: 'Agent started' };
             }
             const res = await fetch(`${API_BASE}/agent/run`, {
                 method: 'POST',
@@ -509,6 +565,25 @@ This grant represents a pivotal opportunity for Glisten International Academy to
             });
             return handleResponse<any>(res);
         },
+        stop: async () => {
+            if (IS_DEMO) {
+                demoAgentState.isRunning = false;
+                demoAgentState.logs.unshift({
+                    startedAt: new Date().toISOString(),
+                    action: 'SYSTEM',
+                    status: 'STOPPED',
+                    grantsFound: 0,
+                    grantsMatched: 0,
+                    error: null
+                });
+                return { success: true };
+            }
+            const res = await fetch(`${API_BASE}/agent/stop`, {
+                method: 'POST',
+                headers: getHeaders(),
+            });
+            return handleResponse<any>(res);
+        }
     },
 };
 

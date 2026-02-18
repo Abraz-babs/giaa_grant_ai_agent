@@ -335,7 +335,11 @@ export const GrantList: React.FC<GrantListProps & { selectedId?: string }> = ({
                       <NeonButton
                         size="sm"
                         onClick={() => {
-                          if (grant.websiteUrl) window.open(grant.websiteUrl, '_blank');
+                          if (grant.websiteUrl) {
+                            // Direct navigation with security best practices
+                            const newWindow = window.open(grant.websiteUrl, '_blank', 'noopener,noreferrer');
+                            if (newWindow) newWindow.opener = null;
+                          }
                         }}
                         disabled={!grant.websiteUrl}
                         className={!grant.websiteUrl ? 'opacity-50 cursor-not-allowed' : ''}

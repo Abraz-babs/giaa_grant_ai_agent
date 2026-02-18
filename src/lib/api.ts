@@ -81,7 +81,12 @@ export const api = {
         },
         verify: async () => {
             if (IS_DEMO) {
-                // If token exists in local storage (checked by caller essentially), return user
+                const token = getToken();
+                if (token && token.startsWith('demo-token-')) {
+                    const userId = token.replace('demo-token-', '');
+                    const user = mockUsers.find(u => u.id === userId);
+                    if (user) return { user };
+                }
                 return { user: mockUser };
             }
             const res = await fetch(`${API_BASE}/auth/verify`, { headers: getHeaders() });

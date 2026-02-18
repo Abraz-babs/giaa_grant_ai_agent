@@ -156,10 +156,39 @@ export const api = {
                 const newProposal: Proposal = {
                     id: `demo-${Date.now()}`,
                     grantId,
-                    title: title || 'Demo Proposal',
+                    title: title || 'Strategic Grant Proposal for Glisten International Academy',
                     status: 'DRAFT',
                     content: [
-                        { id: '1', title: 'Executive Summary', content: 'This is a demo proposal generated in static mode.', wordCount: 10, maxWords: 500 }
+                        {
+                            id: '1',
+                            title: 'Executive Summary',
+                            content: 'Glisten International Academy seeks funding to establish a state-of-the-art Center of Excellence for AI and Robotics. This project aims to bridge the digital divide by equipping over 1,200 students with future-ready skills in coding, machine learning, and hardware engineering. By leveraging our existing infrastructure and success in the VEX Robotics Championship, we propose a scalable model for STEM education that can be replicated across the region.',
+                            wordCount: 65,
+                            maxWords: 500,
+                            aiSuggestions: ['Emphasize the scalability of the model', 'Mention specific student demographics']
+                        },
+                        {
+                            id: '2',
+                            title: 'Project Methodology',
+                            content: 'Phase 1: Infrastructure Upgrade (Months 1-3) - Procurement of advanced robotics kits (V5 Workcells), AI workstations, and 3D printers. Renovation of the existing ICT complex to accommodate collaborative workspace.\n\nPhase 2: Curriculum Integration (Months 4-6) - Training of 15 STEM educators on the new hardware. Rollout of the updated curriculum for JSS1-SS2 students, focusing on Python programming and sensor integration.\n\nPhase 3: Community Outreach (Months 7-12) - Hosting weekend bootcamps for public school students in the Jahi district to foster community inclusion.',
+                            wordCount: 110,
+                            maxWords: 1000,
+                            aiSuggestions: ['Detail the assessment metrics for each phase']
+                        },
+                        {
+                            id: '3',
+                            title: 'Expected Outcomes & Impact',
+                            content: '1. Increase in student STEM proficiency by 40% within the first year.\n2. Participation of 500+ students in regional and international robotics competitions.\n3. Training of 50 teachers from neighboring schools, creating a multiplier effect.\n4. Creation of a sustainable "Tech-Club" network across Abuja.',
+                            wordCount: 45,
+                            maxWords: 750
+                        },
+                        {
+                            id: '4',
+                            title: 'Budget Overview',
+                            content: 'Total Request: $75,000\n- Equipment & Hardware: $45,000 (60%)\n- Teacher Training & Certification: $15,000 (20%)\n- Curriculum Development: $5,000 (6.6%)\n- Community Outreach/Events: $10,000 (13.3%)',
+                            wordCount: 30,
+                            maxWords: 500
+                        }
                     ],
                     aiGenerated: true,
                     createdAt: new Date().toISOString(),

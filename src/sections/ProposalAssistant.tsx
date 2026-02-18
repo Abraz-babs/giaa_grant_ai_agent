@@ -100,7 +100,7 @@ export const ProposalAssistant: React.FC<ProposalAssistantProps> = ({
                      font-rajdhani"
           >
             <option value="">Select a grant to generate proposal...</option>
-            {grants.filter(g => g.status === 'REVIEWING' || g.status === 'APPLYING').map(grant => (
+            {grants.filter(g => g.status !== 'REJECTED' && g.status !== 'FUNDED').map(grant => (
               <option key={grant.id} value={grant.id}>
                 {grant.name} ({grant.relevanceScore} match)
               </option>

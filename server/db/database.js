@@ -70,6 +70,7 @@ function initSchema() {
       amount_max REAL DEFAULT 0,
       currency TEXT DEFAULT 'USD',
       deadline TEXT,
+      is_expired INTEGER DEFAULT 0,
       description TEXT,
       eligibility TEXT DEFAULT '[]',
       category TEXT DEFAULT 'GENERAL',
@@ -141,6 +142,12 @@ function initSchema() {
       updated_at TEXT DEFAULT (datetime('now'))
     )
   `);
+
+  // Create indexes for better query performance
+  db.run('CREATE INDEX IF NOT EXISTS idx_grants_deadline ON grants(deadline)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_grants_status ON grants(status)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_grants_relevance ON grants(relevance_score)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_grants_is_expired ON grants(is_expired)');
 
   console.log('✓ Database schema initialized');
 }

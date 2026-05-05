@@ -6,6 +6,36 @@ import { sendGrantNotification } from './whatsapp.js';
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const KEYWORDS = ['education', 'STEM', 'Africa', 'Nigeria', 'school', 'technology', 'AI', 'robotics', 'inclusive', 'grant'];
 
+// Helper to validate and format deadline
+function validateDeadline(deadline) {
+    if (!deadline) return { valid: false, formatted: null };
+    
+    // Try to parse as ISO date (YYYY-MM-DD)
+    const isoRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (isoRegex.test(deadline)) {
+        // Verify it's a valid date
+        const date = new Date(deadline + 'T00:00:00Z');
+        if (!isNaN(date.getTime())) {
+            return { valid: true, formatted: deadline };
+        }
+    }
+    
+    // Try common formats and convert to ISO
+    try {
+        const date = new Date(deadline);
+        if (!isNaN(date.getTime())) {
+            const year = date.getUTCFullYear();
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(date.getUTCDate()).padStart(2, '0');
+            return { valid: true, formatted: `${year}-${month}-${day}` };
+        }
+    } catch (e) {
+        // Continue to reject
+    }
+    
+    return { valid: false, formatted: null };
+}
+
 // Scoring function for relevance
 function calculateRelevanceScore(text) {
     const lower = (text || '').toLowerCase();
@@ -175,25 +205,32 @@ export async function runScraper() {
             const category = detectCategory(combined);
             const { min, max } = extractAmount(combined);
 
+            // Validate deadline
+            const deadlineValidation = validateDeadline(g.deadline);
+            const deadline = deadlineValidation.valid ? deadlineValidation.formatted : null;
+            
+            // Check if grant is already expired
+            const isExpired = deadline ? new Date(deadline) < new Date() ? 1 : 0 : 0;
+
             // Check for duplicate
             const existing = dbGet('SELECT id FROM grants WHERE name = ? AND source = ?', [g.name, g.source]);
             if (existing) continue;
 
             dbRun(`INSERT INTO grants (name, organization, description, category, relevance_score, 
-             website_url, source, deadline, status, estimated_success_rate, readiness_score, amount_min, amount_max, currency)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?, ?, ?, ?, 'USD')`,
+             website_url, source, deadline, is_expired, status, estimated_success_rate, readiness_score, amount_min, amount_max, currency)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?, ?, ?, ?, 'USD')`,
                 [g.name, g.organization, g.description, category, relevance,
-                g.website_url, g.source, g.deadline || null,
+                g.website_url, g.source, deadline, isExpired,
                 relevance === 'HIGH' ? 25 : 10,
                 relevance === 'HIGH' ? 60 : 30,
                     min, max]);
 
             totalMatched++;
 
-            // WhatsApp notification for high-relevance grants
-            if (relevance === 'HIGH') {
+            // WhatsApp notification for high-relevance grants (only if not expired)
+            if (relevance === 'HIGH' && !isExpired) {
                 try {
-                    await sendGrantNotification(g.name, g.organization || 'Unknown', 0, 0, g.deadline || 'TBD');
+                    await sendGrantNotification(g.name, g.organization || 'Unknown', 0, 0, deadline || 'TBD');
                 } catch { /* continue */ }
             }
         }

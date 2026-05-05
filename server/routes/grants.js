@@ -91,17 +91,22 @@ router.get('/alerts/deadlines', authenticateToken, (req, res) => {
 // GET /api/grants
 router.get('/', authenticateToken, (req, res) => {
     try {
-        const { category, status, relevance, search, limit = 50 } = req.query;
+        const { category, status, relevance, search, limit = 50, includeExpired = false } = req.query;
 
         let query = 'SELECT * FROM grants WHERE 1=1';
         const params = [];
+
+        // Filter out expired grants by default unless explicitly requested
+        if (includeExpired !== 'true') {
+            query += ' AND (deadline IS NULL OR deadline > date("now"))';
+        }
 
         if (category) { query += ' AND category = ?'; params.push(category); }
         if (status) { query += ' AND status = ?'; params.push(status); }
         if (relevance) { query += ' AND relevance_score = ?'; params.push(relevance); }
         if (search) { query += ' AND (name LIKE ? OR description LIKE ? OR organization LIKE ?)'; params.push(`%${search}%`, `%${search}%`, `%${search}%`); }
 
-        query += ' ORDER BY created_at DESC LIMIT ?';
+        query += ' ORDER BY deadline ASC, created_at DESC LIMIT ?';
         params.push(Number(limit));
 
         const grants = dbAll(query, params).map(formatGrant);

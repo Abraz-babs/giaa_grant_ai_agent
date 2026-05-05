@@ -103,6 +103,7 @@ export function seedDatabase() {
                 organization: 'World Bank Education Fund',
                 amount_min: 50000, amount_max: 250000, currency: 'USD',
                 deadline: '2026-06-15',
+                is_expired: 0,
                 description: 'Supporting innovative STEM education models in Sub-Saharan Africa with focus on technology integration, teacher training, and scalable curriculum development.',
                 eligibility: JSON.stringify(['Registered educational institution in Africa', 'Minimum 3 years operational', 'Demonstrated STEM programs']),
                 category: 'TECHNOLOGY',
@@ -115,6 +116,7 @@ export function seedDatabase() {
                 organization: 'Google.org',
                 amount_min: 100000, amount_max: 500000, currency: 'USD',
                 deadline: '2026-07-31',
+                is_expired: 0,
                 description: 'Empowering schools to integrate AI and machine learning into curricula across developing nations, with emphasis on ethical AI education and practical applications.',
                 eligibility: JSON.stringify(['Existing AI/tech curriculum', 'Measurable student outcomes', 'Open to schools worldwide']),
                 category: 'TECHNOLOGY',
@@ -127,6 +129,7 @@ export function seedDatabase() {
                 organization: 'UNICEF',
                 amount_min: 25000, amount_max: 100000, currency: 'USD',
                 deadline: '2026-05-20',
+                is_expired: 0,
                 description: 'Supporting schools in developing inclusive education models that serve children with disabilities and diverse learning needs.',
                 eligibility: JSON.stringify(['K-12 educational institutions', 'Active inclusion programs', 'Located in eligible UNICEF countries']),
                 category: 'GENERAL',
@@ -139,6 +142,7 @@ export function seedDatabase() {
                 organization: 'UK Foreign, Commonwealth & Development Office',
                 amount_min: 75000, amount_max: 300000, currency: 'GBP',
                 deadline: '2026-08-15',
+                is_expired: 0,
                 description: 'Funding innovative use of technology in education across Commonwealth nations, focused on bridging the digital divide.',
                 eligibility: JSON.stringify(['Commonwealth nation institution', 'Track record in ed-tech', 'Partnership with local government']),
                 category: 'TECHNOLOGY',
@@ -151,6 +155,7 @@ export function seedDatabase() {
                 organization: 'Mastercard Foundation',
                 amount_min: 200000, amount_max: 1000000, currency: 'USD',
                 deadline: '2026-09-30',
+                is_expired: 0,
                 description: 'Enabling young people in Africa to access quality education and develop leadership skills for transforming their communities.',
                 eligibility: JSON.stringify(['African institution', 'Scholarship program capacity', 'Community impact focus']),
                 category: 'GENERAL',
@@ -162,22 +167,23 @@ export function seedDatabase() {
                 name: 'USAID Robotics & Innovation in Learning',
                 organization: 'USAID',
                 amount_min: 50000, amount_max: 200000, currency: 'USD',
-                deadline: '2026-04-30',
+                deadline: '2026-10-30',
+                is_expired: 0,
                 description: 'Promoting hands-on robotics and innovation labs within schools across Africa, emphasizing practical skills for future workforce readiness.',
                 eligibility: JSON.stringify(['Schools with existing STEM infrastructure', 'Robotics programs or plans', 'Measurable outcomes']),
                 category: 'TECHNOLOGY',
-                relevance_score: 'HIGH', status: 'APPLYING',
+                relevance_score: 'HIGH', status: 'NEW',
                 requirements: JSON.stringify([]),
                 readiness_score: 72, estimated_success_rate: 30, source: 'Seeded'
             }
         ];
 
         for (const g of grants) {
-            dbRun(`INSERT INTO grants (name, organization, amount_min, amount_max, currency, deadline, 
+            dbRun(`INSERT INTO grants (name, organization, amount_min, amount_max, currency, deadline, is_expired,
              description, eligibility, category, relevance_score, status, requirements, 
              readiness_score, estimated_success_rate, source)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [g.name, g.organization, g.amount_min, g.amount_max, g.currency, g.deadline,
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [g.name, g.organization, g.amount_min, g.amount_max, g.currency, g.deadline, g.is_expired,
                 g.description, g.eligibility, g.category, g.relevance_score, g.status, g.requirements,
                 g.readiness_score, g.estimated_success_rate, g.source]);
         }

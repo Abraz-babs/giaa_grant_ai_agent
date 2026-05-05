@@ -6,7 +6,7 @@ const API_BASE = '/api';
 // Enable Mock Mode if on GitHub Pages or if explicitly set
 const IS_GH_PAGES = window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app');
 const IS_DEMO_ENV = import.meta.env.MODE === 'demo';
-const FORCE_MOCK = true; // Temporary overriding to ensure it works for the presentation
+const FORCE_MOCK = false; // Disabled - now using real API to fetch live grants
 const IS_DEMO = IS_GH_PAGES || IS_DEMO_ENV || FORCE_MOCK;
 
 console.log(' [DEBUG] API Initialization:', {

@@ -19,7 +19,11 @@ async function handleResponse<T>(res: Response): Promise<T> {
     if (!data.success) throw new Error(data.error || "Request failed");
     return data.data;
   } else {
-    throw new Error("INVALID_JSON_RESPONSE");
+    const text = await res.text().catch(() => "");
+    const snippet = text.substring(0, 200);
+    throw new Error(
+      `Backend returned non-JSON response (status ${res.status}). Make sure the backend server is running on port 3001. Response: ${snippet}`,
+    );
   }
 }
 

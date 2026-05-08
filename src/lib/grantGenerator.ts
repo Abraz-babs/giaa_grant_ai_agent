@@ -408,10 +408,6 @@ function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function randomElement<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 function randomSubset<T>(arr: T[], min: number, max: number): T[] {
   const count = randomInt(min, Math.min(max, arr.length));
   const shuffled = [...arr].sort(() => Math.random() - 0.5);

@@ -1,13 +1,10 @@
+import { mockSchoolProfile, mockAgent, mockUser, mockUsers } from "./mockData";
 import {
-  mockGrants,
-  mockStats,
-  mockNotifications,
-  mockSchoolProfile,
-  mockAgent,
-  mockUser,
-  mockUsers,
-  mockDeadlineAlerts,
-} from "./mockData";
+  generateGrants,
+  generateStats,
+  generateDeadlineAlerts,
+  generateNotifications,
+} from "./grantGenerator";
 
 const API_BASE = "/api";
 
@@ -15,6 +12,15 @@ const API_BASE = "/api";
 const IS_GH_PAGES =
   window.location.hostname === "abraz-babs.github.io" ||
   window.location.hostname.endsWith(".github.io");
+
+// Cache for dynamically generated grants (refreshes on each page load)
+let _cachedGrants: ReturnType<typeof generateGrants> | null = null;
+function getCachedGrants() {
+  if (!_cachedGrants) {
+    _cachedGrants = generateGrants(8 + Math.floor(Math.random() * 5)); // 8-12 grants
+  }
+  return _cachedGrants;
+}
 
 function getToken(): string | null {
   return localStorage.getItem("giaa_token");
@@ -103,7 +109,8 @@ export const api = {
     }) => {
       if (IS_GH_PAGES) {
         await delay();
-        let filtered = [...mockGrants];
+        const grants = getCachedGrants();
+        let filtered = [...grants];
         if (params?.category) {
           filtered = filtered.filter((g) => g.category === params.category);
         }
@@ -130,7 +137,8 @@ export const api = {
     get: async (id: string) => {
       if (IS_GH_PAGES) {
         await delay();
-        const grant = mockGrants.find((g) => g.id === id);
+        const grants = getCachedGrants();
+        const grant = grants.find((g) => g.id === id);
         if (!grant) throw new Error("Grant not found");
         return grant;
       }
@@ -142,7 +150,8 @@ export const api = {
     updateStatus: async (id: string, status: string) => {
       if (IS_GH_PAGES) {
         await delay();
-        const grant = mockGrants.find((g) => g.id === id);
+        const grants = getCachedGrants();
+        const grant = grants.find((g) => g.id === id);
         if (!grant) throw new Error("Grant not found");
         return { ...grant, status };
       }
@@ -156,7 +165,8 @@ export const api = {
     getStats: async () => {
       if (IS_GH_PAGES) {
         await delay();
-        return mockStats;
+        const grants = getCachedGrants();
+        return generateStats(grants);
       }
       const res = await fetch(`${API_BASE}/grants/stats/dashboard`, {
         headers: getHeaders(),
@@ -166,7 +176,8 @@ export const api = {
     getDeadlineAlerts: async () => {
       if (IS_GH_PAGES) {
         await delay();
-        return mockDeadlineAlerts;
+        const grants = getCachedGrants();
+        return generateDeadlineAlerts(grants);
       }
       const res = await fetch(`${API_BASE}/grants/alerts/deadlines`, {
         headers: getHeaders(),
@@ -226,7 +237,8 @@ export const api = {
     list: async () => {
       if (IS_GH_PAGES) {
         await delay();
-        return mockNotifications;
+        const grants = getCachedGrants();
+        return generateNotifications(grants);
       }
       const res = await fetch(`${API_BASE}/notifications`, {
         headers: getHeaders(),
@@ -236,7 +248,9 @@ export const api = {
     unreadCount: async () => {
       if (IS_GH_PAGES) {
         await delay();
-        const count = mockNotifications.filter((n) => !n.read).length;
+        const grants = getCachedGrants();
+        const notifications = generateNotifications(grants);
+        const count = notifications.filter((n) => !n.read).length;
         return { count };
       }
       const res = await fetch(`${API_BASE}/notifications/unread-count`, {
@@ -305,10 +319,17 @@ export const api = {
     run: async () => {
       if (IS_GH_PAGES) {
         await delay(1500);
+        // Regenerate grants when agent runs — fresh data every time
+        _cachedGrants = generateGrants(8 + Math.floor(Math.random() * 5));
         return {
           ...mockAgent,
           lastRun: new Date().toISOString(),
           status: "ACTIVE",
+          stats: {
+            ...mockAgent.stats,
+            totalGrantsFound:
+              mockAgent.stats.totalGrantsFound + _cachedGrants.length,
+          },
         };
       }
       const res = await fetch(`${API_BASE}/agent/run`, {

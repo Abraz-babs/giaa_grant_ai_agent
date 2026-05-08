@@ -1,0 +1,671 @@
+import type {
+  Grant,
+  DashboardStats,
+  Notification,
+  SchoolProfile,
+  AIAgent,
+  AgentConfiguration,
+  AgentStats,
+  AgentTask,
+  GrantSource,
+  NotificationSettings,
+  FilteringCriteria,
+} from "../types";
+
+export const mockUser = {
+  id: "1",
+  name: "Zakiyah Zuhair",
+  email: "zakiyah@glisteninternationalacademy.com",
+  role: "ADMIN" as const,
+  permissions: ["ALL"],
+  lastLogin: "2026-05-08T08:00:00Z",
+  createdAt: "2026-01-01T00:00:00Z",
+};
+
+export const mockUsers = [
+  mockUser,
+  {
+    id: "2",
+    name: "Zarah Zuhair",
+    email: "zarah@glisteninternationalacademy.com",
+    role: "ADMIN" as const,
+    permissions: ["ALL"],
+    lastLogin: "2026-05-07T10:00:00Z",
+    createdAt: "2026-01-01T00:00:00Z",
+  },
+  {
+    id: "3",
+    name: "Mr. Alabi",
+    email: "alabi@glisteninternationalacademy.com",
+    role: "MANAGER" as const,
+    permissions: ["VIEW_GRANTS", "MANAGE_APPLICATIONS"],
+    lastLogin: "2026-05-06T09:00:00Z",
+    createdAt: "2026-01-15T00:00:00Z",
+  },
+  {
+    id: "4",
+    name: "Amina Bello",
+    email: "amina.bello@glisteninternationalacademy.com",
+    role: "VIEWER" as const,
+    permissions: ["VIEW_GRANTS"],
+    lastLogin: "2026-05-05T11:00:00Z",
+    createdAt: "2026-02-01T00:00:00Z",
+  },
+  {
+    id: "5",
+    name: "Yusuf Ibrahim",
+    email: "yusuf.ibrahim@glisteninternationalacademy.com",
+    role: "VIEWER" as const,
+    permissions: ["VIEW_GRANTS"],
+    lastLogin: "2026-05-04T14:00:00Z",
+    createdAt: "2026-02-01T00:00:00Z",
+  },
+];
+
+export const mockGrants: Grant[] = [
+  {
+    id: "1",
+    name: "Tony Elumelu Foundation Grant 2026",
+    organization: "Tony Elumelu Foundation",
+    description:
+      "The Tony Elumelu Foundation (TEF) Entrepreneurship Programme is a leading philanthropic initiative empowering young African entrepreneurs. The 2026 cycle offers seed funding, mentorship, and business training to 1,000+ African entrepreneurs across all sectors. Focus areas include agribusiness, technology, healthcare, and education. Selected entrepreneurs receive $5,000 in non-refundable seed capital, access to a 12-week business training curriculum, and mentorship from experienced business leaders.",
+    amount: { min: 5000, max: 5000, currency: "USD" },
+    deadline: "2026-06-30",
+    category: "ENTREPRENEURSHIP",
+    status: "NEW",
+    relevanceScore: "HIGH",
+    eligibility: [
+      "African entrepreneurs aged 18+",
+      "For-profit business idea in any sector",
+      "Must be a citizen or legal resident of an African country",
+      "Must have a scalable business concept",
+    ],
+    requirements: [
+      "Online application form",
+      "Business plan or pitch deck",
+      "Valid identification document",
+      "Proof of residence",
+    ],
+    documents: [],
+    createdAt: "2026-01-15",
+    updatedAt: "2026-05-01",
+    applicationReadiness: {
+      score: 75,
+      missingRequirements: ["Business plan with financial projections"],
+      strengths: ["Strong entrepreneurship focus", "Previous grant experience"],
+      recommendations: [
+        "Prepare detailed business plan",
+        "Gather financial documents",
+      ],
+      estimatedSuccessRate: 65,
+    },
+  },
+  {
+    id: "2",
+    name: "African Union Continental Education Strategy",
+    organization: "African Union Commission",
+    description:
+      "The African Union's Continental Education Strategy for Africa (CESA 16-25) funding call supports innovative education projects that promote STEM education, teacher training, and digital learning across the continent. Priority is given to projects that demonstrate scalability, gender parity, and use of technology. This grant aims to accelerate progress towards SDG 4 (Quality Education) and Agenda 2063 goals.",
+    amount: { min: 25000, max: 100000, currency: "USD" },
+    deadline: "2026-07-15",
+    category: "EDUCATION_INNOVATION",
+    status: "NEW",
+    relevanceScore: "HIGH",
+    eligibility: [
+      "Educational institutions in AU member states",
+      "NGOs with education focus",
+      "Must demonstrate regional impact potential",
+      "Must have been operating for at least 3 years",
+    ],
+    requirements: [
+      "Project proposal (max 10 pages)",
+      "Budget breakdown",
+      "Institutional registration documents",
+      "Letters of support from partners",
+      "Monitoring and evaluation framework",
+    ],
+    documents: [],
+    createdAt: "2026-02-01",
+    updatedAt: "2026-05-01",
+    applicationReadiness: {
+      score: 60,
+      missingRequirements: [
+        "Letters of support from partners",
+        "M&E framework",
+      ],
+      strengths: [
+        "Regional impact potential in West Africa",
+        "STEM programs alignment",
+      ],
+      recommendations: [
+        "Secure partner letters of support",
+        "Develop M&E framework",
+      ],
+      estimatedSuccessRate: 55,
+    },
+  },
+  {
+    id: "3",
+    name: "STEM to Space Initiative 2026",
+    organization: "Opolo Global Innovations",
+    description:
+      "The STEM to Space Initiative is a unique program that integrates space science and astronomy into secondary school STEM curricula. Selected schools receive telescope equipment, teacher training in space science, and access to a network of aerospace professionals. The program aims to inspire the next generation of African space scientists and engineers through hands-on learning experiences.",
+    amount: { min: 1000, max: 10000, currency: "USD" },
+    deadline: "2026-05-20",
+    category: "STEM",
+    status: "REVIEWING",
+    relevanceScore: "HIGH",
+    eligibility: [
+      "Secondary schools in Africa",
+      "Must have a functioning science laboratory",
+      "Must have at least 2 STEM teachers on staff",
+      "Must commit to establishing a space club",
+    ],
+    requirements: [
+      "School profile and history",
+      "STEM teacher qualifications",
+      "Current science lab inventory",
+      "Commitment letter from school principal",
+      "Proposed implementation plan",
+    ],
+    documents: [],
+    createdAt: "2026-03-01",
+    updatedAt: "2026-05-05",
+    applicationReadiness: {
+      score: 85,
+      missingRequirements: ["Commitment letter from principal"],
+      strengths: [
+        "Existing robotics lab",
+        "Active space club",
+        "Qualified STEM teachers",
+      ],
+      recommendations: [
+        "Obtain principal's commitment letter",
+        "Finalize implementation plan",
+      ],
+      estimatedSuccessRate: 80,
+    },
+  },
+  {
+    id: "4",
+    name: "Google for Education Transformation Grant",
+    organization: "Google",
+    description:
+      "Google for Education offers transformation grants to schools demonstrating innovative use of technology to improve learning outcomes. The grant provides Google Workspace for Education Plus licenses, Chromebook devices, and professional development for teachers. Selected schools become Google Reference Schools, gaining access to a global network of innovative educators.",
+    amount: { min: 15000, max: 50000, currency: "USD" },
+    deadline: "2026-08-01",
+    category: "TECHNOLOGY",
+    status: "NEW",
+    relevanceScore: "HIGH",
+    eligibility: [
+      "Primary or secondary schools",
+      "Must have basic ICT infrastructure",
+      "Must have leadership support for digital transformation",
+      "Must commit to sharing best practices",
+    ],
+    requirements: [
+      "Technology integration plan",
+      "Staff professional development strategy",
+      "Device deployment and management plan",
+      "Internet connectivity assessment",
+      "Parent/community engagement plan",
+    ],
+    documents: [],
+    createdAt: "2026-03-15",
+    updatedAt: "2026-05-01",
+    applicationReadiness: {
+      score: 70,
+      missingRequirements: [
+        "Device deployment plan",
+        "Community engagement plan",
+      ],
+      strengths: ["Already uses Google Workspace", "Strong ICT infrastructure"],
+      recommendations: [
+        "Develop device deployment strategy",
+        "Create community engagement plan",
+      ],
+      estimatedSuccessRate: 70,
+    },
+  },
+  {
+    id: "5",
+    name: "UNESCO Global Education Monitoring Grant",
+    organization: "UNESCO",
+    description:
+      "The UNESCO Global Education Monitoring (GEM) Grant supports research and monitoring projects that track progress towards SDG 4 education targets. This grant funds data collection, analysis, and reporting on educational quality, equity, and inclusion. Projects should generate evidence that informs education policy and practice at local, national, or regional levels.",
+    amount: { min: 10000, max: 40000, currency: "USD" },
+    deadline: "2026-09-01",
+    category: "EDUCATION_INNOVATION",
+    status: "NEW",
+    relevanceScore: "MEDIUM",
+    eligibility: [
+      "Research institutions and universities",
+      "Educational NGOs with research capacity",
+      "Must have experience in education data analysis",
+      "Must have partnerships with schools",
+    ],
+    requirements: [
+      "Research proposal with methodology",
+      "Data collection plan",
+      "Ethics approval documentation",
+      "Team qualifications and experience",
+      "Dissemination and impact plan",
+    ],
+    documents: [],
+    createdAt: "2026-04-01",
+    updatedAt: "2026-05-01",
+    applicationReadiness: {
+      score: 50,
+      missingRequirements: [
+        "Research proposal",
+        "Ethics approval",
+        "Data collection plan",
+      ],
+      strengths: ["Can serve as data collection site", "Assessment experience"],
+      recommendations: [
+        "Develop research proposal",
+        "Seek research partnerships",
+      ],
+      estimatedSuccessRate: 45,
+    },
+  },
+  {
+    id: "6",
+    name: "Mastercard Foundation Scholars Program",
+    organization: "Mastercard Foundation",
+    description:
+      "The Mastercard Foundation Scholars Program provides comprehensive scholarships and support to academically talented yet economically disadvantaged young people in Africa. The program covers tuition, accommodation, books, and living expenses for secondary and university education. Scholars also receive leadership development, mentorship, and career guidance to prepare them as transformative leaders.",
+    amount: { min: 50000, max: 200000, currency: "USD" },
+    deadline: "2026-10-15",
+    category: "INCLUSIVE_EDUCATION",
+    status: "NEW",
+    relevanceScore: "MEDIUM",
+    eligibility: [
+      "Educational institutions in Africa",
+      "Must have capacity to identify and support disadvantaged students",
+      "Must have existing scholarship or financial aid programs",
+      "Must demonstrate commitment to leadership development",
+    ],
+    requirements: [
+      "Institutional capacity assessment",
+      "Student selection criteria and process",
+      "Scholarship management plan",
+      "Leadership development curriculum",
+      "Monitoring and reporting framework",
+    ],
+    documents: [],
+    createdAt: "2026-04-15",
+    updatedAt: "2026-05-01",
+    applicationReadiness: {
+      score: 45,
+      missingRequirements: [
+        "Scholarship management plan",
+        "Leadership curriculum",
+        "M&E framework",
+      ],
+      strengths: [
+        "Serves diverse socioeconomic population",
+        "Existing scholarship programs",
+      ],
+      recommendations: [
+        "Formalize scholarship management",
+        "Develop leadership curriculum",
+      ],
+      estimatedSuccessRate: 40,
+    },
+  },
+  {
+    id: "7",
+    name: "IBRO Neuroscience Training Grants 2026",
+    organization: "International Brain Research Organization (IBRO)",
+    description:
+      "The IBRO Neuroscience Training Grants support neuroscience education and research capacity building in Africa. The program funds workshops, training courses, and educational materials for neuroscience teaching at secondary and tertiary levels. Grants can be used to organize neuroscience outreach programs, purchase teaching equipment, and develop neuroscience curricula.",
+    amount: { min: 5000, max: 25000, currency: "USD" },
+    deadline: "2026-11-01",
+    category: "STEM",
+    status: "NEW",
+    relevanceScore: "MEDIUM",
+    eligibility: [
+      "Educational institutions in Africa",
+      "Must have biology/neuroscience teaching capacity",
+      "Must have qualified neuroscience educators",
+      "Must demonstrate commitment to neuroscience education",
+    ],
+    requirements: [
+      "Training program proposal",
+      "Budget and resource plan",
+      "Qualification documents of teaching staff",
+      "Letter of institutional support",
+      "Impact assessment plan",
+    ],
+    documents: [],
+    createdAt: "2026-05-01",
+    updatedAt: "2026-05-05",
+    applicationReadiness: {
+      score: 40,
+      missingRequirements: [
+        "Training program proposal",
+        "Budget plan",
+        "Staff qualifications",
+      ],
+      strengths: [
+        "Strong biology and science programs",
+        "Research partnerships",
+      ],
+      recommendations: [
+        "Develop neuroscience training proposal",
+        "Identify qualified educators",
+      ],
+      estimatedSuccessRate: 35,
+    },
+  },
+];
+
+export const mockStats: DashboardStats = {
+  totalGrants: 7,
+  activeApplications: 1,
+  pendingReview: 1,
+  fundedGrants: 0,
+  totalFunding: 0,
+  upcomingDeadlines: 2,
+  aiMatches: 4,
+  successRate: 0,
+};
+
+export const mockNotifications: Notification[] = [
+  {
+    id: "1",
+    type: "DEADLINE_ALERT",
+    title: "STEM to Space deadline approaching",
+    message:
+      "The STEM to Space Initiative 2026 closes in 12 days. Your application is under review.",
+    data: { grantId: "3" },
+    read: false,
+    createdAt: "2026-05-07",
+    priority: "HIGH",
+  },
+  {
+    id: "2",
+    type: "GRANT_FOUND",
+    title: "New grant match found",
+    message:
+      "IBRO Neuroscience Training Grants 2026 matches your school profile with 70% relevance.",
+    data: { grantId: "7" },
+    read: false,
+    createdAt: "2026-05-06",
+    priority: "MEDIUM",
+  },
+  {
+    id: "3",
+    type: "AI_RECOMMENDATION",
+    title: "AI Agent completed scan",
+    message:
+      "The AI Grant Agent scanned 7 active grant sources and found 4 new potential matches.",
+    data: null,
+    read: true,
+    createdAt: "2026-05-05",
+    priority: "LOW",
+  },
+  {
+    id: "4",
+    type: "DEADLINE_ALERT",
+    title: "Tony Elumelu Foundation deadline",
+    message:
+      "The Tony Elumelu Foundation Grant 2026 closes on June 30. Start preparing your application.",
+    data: { grantId: "1" },
+    read: true,
+    createdAt: "2026-05-04",
+    priority: "HIGH",
+  },
+  {
+    id: "5",
+    type: "GRANT_FOUND",
+    title: "High match: African Union Grant",
+    message:
+      "African Union Continental Education Strategy matches your profile with 88% relevance.",
+    data: { grantId: "2" },
+    read: true,
+    createdAt: "2026-05-03",
+    priority: "MEDIUM",
+  },
+];
+
+export const mockSchoolProfile: SchoolProfile = {
+  id: "1",
+  name: "Glisten International Academy",
+  type: "PRIVATE",
+  location: {
+    country: "Nigeria",
+    state: "FCT",
+    city: "Abuja",
+    address: "Plot 1457, Cadastral Zone B8, Jahi District",
+  },
+  establishedYear: 2006,
+  studentCount: { total: 1250, male: 600, female: 650, specialNeeds: 45 },
+  staffCount: { teaching: 120, nonTeaching: 50 },
+  facilities: [
+    "Robotics & AI Lab",
+    "Science Laboratories (Physics, Chemistry, Biology)",
+    "ICT Complex",
+    "Library & Research Center",
+    "Sports Complex",
+    "Auditorium",
+    "Boarding Facilities",
+  ],
+  programs: [
+    "Earley Years Foundation Stage",
+    "Primary Education (Nigerian/British)",
+    "Junior Secondary (BECE/Cambridge Checkpoint)",
+    "Senior Secondary (WAEC/NECO/IGCSE)",
+    "Robotics & Coding Club",
+  ],
+  achievements: [
+    "Best Private Primary School in FCT (Inaugural Year)",
+    "Outstanding NGO of the Year (Alumni Award)",
+    "VEX Robotics World Championship Participants",
+    "Accredited by Dept of Quality Assurance",
+  ],
+  focusAreas: [
+    "Academic Excellence",
+    "Technological Innovation",
+    "Moral & Character Development",
+    "Global Citizenship",
+  ],
+  registrationDetails: {
+    registrationNumber: "GIA-2006-REG",
+    accreditationStatus: "Fully Accredited",
+    ngoStatus: false,
+  },
+  contactInfo: {
+    email: "info@glisteninternationalacademy.com",
+    phone: "+234 803 123 4567",
+    website: "https://glisteninternationalacademy.com",
+  },
+  documents: [],
+  impactStories: [],
+  strategicGoals: [
+    "Expand AI & Robotics integration across all levels",
+    "Maintain 100% distinction rate in external exams",
+    "Foster global partnerships for student exchange",
+  ],
+};
+
+const mockAgentSources: GrantSource[] = [
+  {
+    id: "1",
+    name: "Tony Elumelu Foundation",
+    url: "https://www.tonyelumelufoundation.org",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "2",
+    name: "African Union",
+    url: "https://au.int",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "3",
+    name: "UNESCO",
+    url: "https://www.unesco.org",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "4",
+    name: "Mastercard Foundation",
+    url: "https://mastercardfdn.org",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "5",
+    name: "Google for Education",
+    url: "https://edu.google.com",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "6",
+    name: "Opolo Global Innovations",
+    url: "https://opologlobal.com",
+    type: "WEBSITE",
+    isActive: true,
+  },
+  {
+    id: "7",
+    name: "IBRO",
+    url: "https://ibro.org",
+    type: "WEBSITE",
+    isActive: true,
+  },
+];
+
+const mockNotificationSettings: NotificationSettings = {
+  emailEnabled: true,
+  whatsappEnabled: false,
+  digestFrequency: "DAILY",
+  urgentAlertsEnabled: true,
+  recipients: ["zakiyah@glisteninternationalacademy.com"],
+};
+
+const mockFilteringCriteria: FilteringCriteria = {
+  minAmount: 0,
+  maxAmount: 500000,
+  categories: [
+    "STEM",
+    "AI_EDUCATION",
+    "ROBOTICS",
+    "EDUCATION_INNOVATION",
+    "TECHNOLOGY",
+    "ENTREPRENEURSHIP",
+  ],
+  eligibleRegions: ["Africa", "Nigeria", "West Africa"],
+  deadlineRange: 90,
+};
+
+const mockAgentConfig: AgentConfiguration = {
+  searchKeywords: [
+    "STEM education",
+    "robotics",
+    "AI",
+    "teacher training",
+    "digital learning",
+    "scholarship",
+    "innovation",
+  ],
+  grantSources: mockAgentSources,
+  notificationSettings: mockNotificationSettings,
+  autoDraftEnabled: false,
+  filteringCriteria: mockFilteringCriteria,
+};
+
+const mockAgentTasks: AgentTask[] = [
+  {
+    id: "1",
+    type: "DISCOVER",
+    status: "COMPLETED",
+    priority: "HIGH",
+    createdAt: "2026-05-05T06:00:00Z",
+    completedAt: "2026-05-05T06:02:30Z",
+    result: { sourcesScanned: 7, newGrantsFound: 4 },
+  },
+  {
+    id: "2",
+    type: "FILTER",
+    status: "COMPLETED",
+    priority: "HIGH",
+    createdAt: "2026-05-05T06:02:30Z",
+    completedAt: "2026-05-05T06:03:00Z",
+    result: { totalFiltered: 4, matchesFound: 4 },
+  },
+  {
+    id: "3",
+    type: "ANALYZE",
+    status: "COMPLETED",
+    priority: "MEDIUM",
+    createdAt: "2026-05-05T06:03:00Z",
+    completedAt: "2026-05-05T06:05:00Z",
+    result: { analyzed: 4, recommendations: 4 },
+  },
+  {
+    id: "4",
+    type: "NOTIFY",
+    status: "COMPLETED",
+    priority: "MEDIUM",
+    createdAt: "2026-05-05T06:05:00Z",
+    completedAt: "2026-05-05T06:05:05Z",
+    result: { notificationsSent: 2 },
+  },
+];
+
+const mockAgentStats: AgentStats = {
+  totalGrantsFound: 28,
+  totalGrantsFiltered: 14,
+  totalApplicationsSubmitted: 2,
+  totalFundingSecured: 0,
+  successRate: 0,
+  averageResponseTime: 4500,
+};
+
+export const mockAgent: AIAgent = {
+  id: "agent-1",
+  name: "GIA Grant Intelligence Agent",
+  status: "ACTIVE",
+  lastRun: "2026-05-05T06:05:05Z",
+  nextRun: "2026-05-06T06:00:00Z",
+  tasks: mockAgentTasks,
+  configuration: mockAgentConfig,
+  stats: mockAgentStats,
+};
+
+export const mockDeadlineAlerts = [
+  {
+    id: "1",
+    grantId: "3",
+    grantName: "STEM to Space Initiative 2026",
+    deadline: "2026-05-20",
+    daysRemaining: 12,
+    priority: "URGENT" as const,
+    status: "PENDING" as const,
+  },
+  {
+    id: "2",
+    grantId: "1",
+    grantName: "Tony Elumelu Foundation Grant 2026",
+    deadline: "2026-06-30",
+    daysRemaining: 53,
+    priority: "HIGH" as const,
+    status: "NOTIFIED" as const,
+  },
+  {
+    id: "3",
+    grantId: "2",
+    grantName: "African Union Continental Education Strategy",
+    deadline: "2026-07-15",
+    daysRemaining: 68,
+    priority: "MEDIUM" as const,
+    status: "NOTIFIED" as const,
+  },
+];

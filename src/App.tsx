@@ -49,7 +49,9 @@ function AppContent() {
   const dashboardStore = useDashboardStore();
   const aiAgentStore = useAIAgentStore();
   const notificationsStore = useNotificationsStore();
-  const schoolProfileStore = useSchoolProfileStore();
+  const schoolProfileStore = useSchoolProfileStore(
+    user?.id ? String(user.id) : null,
+  );
   const proposalStore = useProposalStore();
 
   // Loading screen

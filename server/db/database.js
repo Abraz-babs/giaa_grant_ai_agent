@@ -1,12 +1,12 @@
-import initSqlJs from 'sql.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import initSqlJs from "sql.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DB_PATH = path.join(__dirname, 'giaa.db');
+const DB_PATH = path.join(__dirname, "giaa.db");
 
 let db = null;
 
@@ -27,13 +27,13 @@ export async function initDb() {
 
   initSchema();
   saveDb();
-  console.log('✓ Database initialized');
+  console.log("✓ Database initialized");
   return db;
 }
 
 export function getDb() {
   if (!db) {
-    throw new Error('Database not initialized. Call initDb() first.');
+    throw new Error("Database not initialized. Call initDb() first.");
   }
   return db;
 }
@@ -144,12 +144,16 @@ function initSchema() {
   `);
 
   // Create indexes for better query performance
-  db.run('CREATE INDEX IF NOT EXISTS idx_grants_deadline ON grants(deadline)');
-  db.run('CREATE INDEX IF NOT EXISTS idx_grants_status ON grants(status)');
-  db.run('CREATE INDEX IF NOT EXISTS idx_grants_relevance ON grants(relevance_score)');
-  db.run('CREATE INDEX IF NOT EXISTS idx_grants_is_expired ON grants(is_expired)');
+  db.run("CREATE INDEX IF NOT EXISTS idx_grants_deadline ON grants(deadline)");
+  db.run("CREATE INDEX IF NOT EXISTS idx_grants_status ON grants(status)");
+  db.run(
+    "CREATE INDEX IF NOT EXISTS idx_grants_relevance ON grants(relevance_score)",
+  );
+  db.run(
+    "CREATE INDEX IF NOT EXISTS idx_grants_is_expired ON grants(is_expired)",
+  );
 
-  console.log('✓ Database schema initialized');
+  console.log("✓ Database schema initialized");
 }
 
 // Helper wrappers to match the old better-sqlite3 API patterns
@@ -184,7 +188,7 @@ export function dbRun(sql, params = []) {
   db.run(sql, params);
   saveDb();
   // Simulate lastInsertRowid
-  const result = dbGet('SELECT last_insert_rowid() as id');
+  const result = dbGet("SELECT last_insert_rowid() as id");
   return { lastInsertRowid: result ? result.id : 0 };
 }
 

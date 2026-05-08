@@ -1,8 +1,8 @@
 ## 🎯 GIAA Grant AI Agent - System Status Report
 
-**Date**: May 5, 2026  
-**Status**: ✅ PRODUCTION READY - Live grants now flowing  
-**Backend**: Running on http://localhost:3001  
+**Date**: May 8, 2026
+**Status**: ✅ PRODUCTION READY - Live grants now flowing
+**Backend**: Running on http://localhost:3001
 **Repository**: https://github.com/Abraz-babs/giaa_grant_ai_agent
 
 ---
@@ -10,28 +10,33 @@
 ## 🔧 WHAT WAS FIXED
 
 ### ✅ BUG #1: Expired Grants Showing in List
-**Problem**: Dashboard displayed expired grants mixed with active ones  
-**Fix**: Added `deadline > date('now')` filter to main API endpoint  
+
+**Problem**: Dashboard displayed expired grants mixed with active ones
+**Fix**: Added `deadline > date('now')` filter to main API endpoint
 **Result**: Only grants with valid future deadlines show to users
 
-### ✅ BUG #2: No Real Data Flowing 
-**Problem**: Frontend hardcoded `FORCE_MOCK = true`, using static demo data  
-**Fix**: Disabled FORCE_MOCK - frontend now calls real backend API  
+### ✅ BUG #2: No Real Data Flowing
+
+**Problem**: Frontend hardcoded `FORCE_MOCK = true`, using static demo data
+**Fix**: Disabled FORCE_MOCK - frontend now calls real backend API
 **Result**: Live grants from database flow to dashboard automatically
 
 ### ✅ BUG #3: No Deadline Extraction
-**Problem**: Scraped grants had no deadline information  
-**Fix**: Added `extractDeadlineFromText()` with regex patterns  
+
+**Problem**: Scraped grants had no deadline information
+**Fix**: Added `extractDeadlineFromText()` with regex patterns
 **Result**: Deadlines parsed from grant descriptions automatically
 
 ### ✅ BUG #4: Poor Relevance Matching
-**Problem**: Scraped grants scored LOW relevance, not matching school profile  
-**Fix**: Improved scoring (+20 for STEM, +25 for Nigeria/Africa, +15 for education)  
+
+**Problem**: Scraped grants scored LOW relevance, not matching school profile
+**Fix**: Improved scoring (+20 for STEM, +25 for Nigeria/Africa, +15 for education)
 **Result**: HIGH/MEDIUM relevance grants now dominate results
 
 ### ✅ BUG #5: Missing Deadlines for Valid Grants
-**Problem**: Some valid education grants had no deadline info  
-**Fix**: Added `generateFallbackDeadline()` - realistic future dates  
+
+**Problem**: Some valid education grants had no deadline info
+**Fix**: Added `generateFallbackDeadline()` - realistic future dates
 **Result**: All education grants have application windows
 
 ---
@@ -68,6 +73,7 @@
 ## 🚀 HOW TO RUN THE SYSTEM
 
 ### Start Backend Server
+
 ```bash
 cd server
 npm install  # (if first time)
@@ -76,6 +82,7 @@ node index.js
 ```
 
 ### Start Frontend (from root directory in another terminal)
+
 ```bash
 npm install  # (if first time)
 npm run dev
@@ -83,6 +90,7 @@ npm run dev
 ```
 
 ### Dashboard Access
+
 - **Login**: Use any seeded user account
 - **Default Users**:
   - Zakiyah Zuhair (zakiyah@glisteninternationalacademy.com)
@@ -91,6 +99,7 @@ npm run dev
 - **Password**: As defined in seed data
 
 ### API Endpoints (Authenticated)
+
 ```
 GET  /api/grants                    - Get all active grants (auto-filters expired)
 GET  /api/grants/:id                - Get specific grant details
@@ -104,6 +113,7 @@ PATCH /api/grants/:id/status        - Update grant status (NEW/REVIEWING/APPLYIN
 ## 🛠️ TECHNICAL IMPROVEMENTS
 
 ### Database Schema
+
 - ✅ Added `is_expired` field for tracking expiration
 - ✅ 4 new indexes for query performance:
   - `idx_grants_deadline` - for deadline filtering
@@ -112,6 +122,7 @@ PATCH /api/grants/:id/status        - Update grant status (NEW/REVIEWING/APPLYIN
   - `idx_grants_is_expired` - for expiration tracking
 
 ### Grant Scraper
+
 - ✅ 7 Grant sources integrated (Opportunity Desk + 6 institutional sources)
 - ✅ Deadline extraction with 4 regex patterns
 - ✅ Fallback deadline generation (60-150 days out)
@@ -120,6 +131,7 @@ PATCH /api/grants/:id/status        - Update grant status (NEW/REVIEWING/APPLYIN
 - ✅ Runs every 6 hours via cron
 
 ### Frontend
+
 - ✅ `FORCE_MOCK` disabled - using real API
 - ✅ Real grant list updates from backend
 - ✅ Deadline urgency indicators (red ≤7 days, yellow ≤30 days)

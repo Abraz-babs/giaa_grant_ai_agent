@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { Login } from '@/pages/Login';
-import { Header } from '@/sections/Header';
-import { Sidebar } from '@/sections/Sidebar';
-import { StatsOverview } from '@/sections/StatsOverview';
-import { GrantList } from '@/sections/GrantList';
-import { AIAgentPanel } from '@/sections/AIAgentPanel';
-import { DeadlineAlerts } from '@/sections/DeadlineAlerts';
-import { ProposalAssistant } from '@/sections/ProposalAssistant';
-import { SchoolProfile } from '@/sections/SchoolProfile';
-import { HoloCard } from '@/components/HoloCard';
-import { NeonButton } from '@/components/NeonButton';
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { Login } from "@/pages/Login";
+import { Header } from "@/sections/Header";
+import { Sidebar } from "@/sections/Sidebar";
+import { StatsOverview } from "@/sections/StatsOverview";
+import { GrantList } from "@/sections/GrantList";
+import { AIAgentPanel } from "@/sections/AIAgentPanel";
+import { DeadlineAlerts } from "@/sections/DeadlineAlerts";
+import { ProposalAssistant } from "@/sections/ProposalAssistant";
+import { SchoolProfile } from "@/sections/SchoolProfile";
+import { HoloCard } from "@/components/HoloCard";
+import { NeonButton } from "@/components/NeonButton";
 import {
   useGrantsStore,
   useDashboardStore,
   useAIAgentStore,
   useNotificationsStore,
   useSchoolProfileStore,
-  useProposalStore
-} from '@/hooks/useStore';
+  useProposalStore,
+} from "@/hooks/useStore";
 import {
   Zap,
   RefreshCw,
@@ -27,14 +27,21 @@ import {
   Clock,
   CheckCircle,
   Sparkles,
-  ChevronRight
-} from 'lucide-react';
+  ChevronRight,
+} from "lucide-react";
 
-type ViewType = 'dashboard' | 'grants' | 'ai-agent' | 'proposals' | 'alerts' | 'profile' | 'settings';
+type ViewType =
+  | "dashboard"
+  | "grants"
+  | "ai-agent"
+  | "proposals"
+  | "alerts"
+  | "profile"
+  | "settings";
 
 function AppContent() {
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
-  const [currentView, setCurrentView] = useState<ViewType>('dashboard');
+  const [currentView, setCurrentView] = useState<ViewType>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Initialize stores (they fetch from API on mount)
@@ -51,7 +58,9 @@ function AppContent() {
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-brand-400 font-display font-semibold">Loading GIAA Grant Agent...</p>
+          <p className="text-brand-400 font-display font-semibold">
+            Loading GIAA Grant Agent...
+          </p>
         </div>
       </div>
     );
@@ -71,21 +80,37 @@ function AppContent() {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl lg:text-3xl font-display font-bold text-white mb-2">
-                Welcome, <span className="text-brand-400">{user?.name || 'User'}</span>
+                Welcome,{" "}
+                <span className="text-brand-400">{user?.name || "User"}</span>
               </h1>
               <p className="text-slate-400 max-w-2xl">
-                Your intelligent grant discovery and management system. The AI agent is actively
-                monitoring for new opportunities tailored to Glisten International Academy.
+                Your intelligent grant discovery and management system. The AI
+                agent is actively monitoring for new opportunities tailored to
+                Glisten International Academy.
               </p>
             </div>
             <div className="flex items-center gap-3">
               <NeonButton
-                onClick={() => aiAgentStore.isRunning ? aiAgentStore.stopAgent() : aiAgentStore.runAgent()}
+                onClick={() =>
+                  aiAgentStore.isRunning
+                    ? aiAgentStore.stopAgent()
+                    : aiAgentStore.runAgent()
+                }
                 variant={aiAgentStore.isRunning ? "secondary" : "primary"}
-                icon={<RefreshCw className={cn('w-4 h-4', aiAgentStore.isRunning && 'animate-spin')} />}
-                className={cn(aiAgentStore.isRunning && "border-neon-green text-neon-green bg-neon-green/10")}
+                icon={
+                  <RefreshCw
+                    className={cn(
+                      "w-4 h-4",
+                      aiAgentStore.isRunning && "animate-spin",
+                    )}
+                  />
+                }
+                className={cn(
+                  aiAgentStore.isRunning &&
+                    "border-neon-green text-neon-green bg-neon-green/10",
+                )}
               >
-                {aiAgentStore.isRunning ? 'Stop Agent' : 'Run Agent Now'}
+                {aiAgentStore.isRunning ? "Stop Agent" : "Run Agent Now"}
               </NeonButton>
             </div>
           </div>
@@ -150,11 +175,11 @@ function AppContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <GrantList
-            grants={grantsStore.grants.slice(0, 5)}
+            grants={grantsStore.grants}
             isLoading={grantsStore.isLoading}
             onGrantClick={(grant) => {
               grantsStore.setSelectedGrant(grant);
-              setCurrentView('grants');
+              setCurrentView("grants");
             }}
             onStatusChange={grantsStore.updateGrantStatus}
           />
@@ -164,10 +189,10 @@ function AppContent() {
             alerts={dashboardStore.deadlineAlerts}
             onDismiss={dashboardStore.dismissAlert}
             onViewGrant={(grantId) => {
-              const grant = grantsStore.grants.find(g => g.id === grantId);
+              const grant = grantsStore.grants.find((g) => g.id === grantId);
               if (grant) {
                 grantsStore.setSelectedGrant(grant);
-                setCurrentView('grants');
+                setCurrentView("grants");
               }
             }}
           />
@@ -184,7 +209,7 @@ function AppContent() {
           <NeonButton
             variant="ghost"
             size="sm"
-            onClick={() => setCurrentView('grants')}
+            onClick={() => setCurrentView("grants")}
           >
             View All
             <ChevronRight className="w-4 h-4" />
@@ -193,7 +218,7 @@ function AppContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {grantsStore.grants
-            .filter(g => g.relevanceScore === 'HIGH' && g.status === 'NEW')
+            .filter((g) => g.relevanceScore === "HIGH" && g.status === "NEW")
             .slice(0, 3)
             .map((grant) => (
               <div
@@ -202,7 +227,7 @@ function AppContent() {
                          hover:border-violet-500/50 transition-all cursor-pointer group"
                 onClick={() => {
                   grantsStore.setSelectedGrant(grant);
-                  setCurrentView('grants');
+                  setCurrentView("grants");
                 }}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -222,7 +247,9 @@ function AppContent() {
                 <div className="flex items-center gap-2 mt-3">
                   <Clock className="w-4 h-4 text-slate-600" />
                   <span className="text-xs text-slate-500">
-                    {grant.deadline ? `${Math.max(0, Math.ceil((new Date(grant.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))} days left` : 'No deadline'}
+                    {grant.deadline
+                      ? `${Math.max(0, Math.ceil((new Date(grant.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))} days left`
+                      : "No deadline"}
                   </span>
                 </div>
               </div>
@@ -234,9 +261,9 @@ function AppContent() {
 
   const renderContent = () => {
     switch (currentView) {
-      case 'dashboard':
+      case "dashboard":
         return renderDashboard();
-      case 'grants':
+      case "grants":
         return (
           <div className="animate-in fade-in duration-500">
             <GrantList
@@ -248,7 +275,7 @@ function AppContent() {
             />
           </div>
         );
-      case 'ai-agent':
+      case "ai-agent":
         return (
           <div className="animate-in fade-in duration-500">
             {aiAgentStore.agent && (
@@ -262,7 +289,7 @@ function AppContent() {
             )}
           </div>
         );
-      case 'proposals':
+      case "proposals":
         return (
           <div className="animate-in fade-in duration-500">
             <ProposalAssistant
@@ -273,23 +300,23 @@ function AppContent() {
             />
           </div>
         );
-      case 'alerts':
+      case "alerts":
         return (
           <div className="animate-in fade-in duration-500">
             <DeadlineAlerts
               alerts={dashboardStore.deadlineAlerts}
               onDismiss={dashboardStore.dismissAlert}
               onViewGrant={(grantId) => {
-                const grant = grantsStore.grants.find(g => g.id === grantId);
+                const grant = grantsStore.grants.find((g) => g.id === grantId);
                 if (grant) {
                   grantsStore.setSelectedGrant(grant);
-                  setCurrentView('grants');
+                  setCurrentView("grants");
                 }
               }}
             />
           </div>
         );
-      case 'profile':
+      case "profile":
         return (
           <div className="animate-in fade-in duration-500">
             {schoolProfileStore.profile && (
@@ -305,11 +332,13 @@ function AppContent() {
             )}
           </div>
         );
-      case 'settings':
+      case "settings":
         return (
           <div className="animate-in fade-in duration-500">
             <HoloCard glowColor="cyan" className="p-8">
-              <h2 className="text-2xl font-display font-bold text-white mb-6">Settings</h2>
+              <h2 className="text-2xl font-display font-bold text-white mb-6">
+                Settings
+              </h2>
               <p className="text-slate-400">
                 Settings configuration panel coming soon. This will include:
               </p>
@@ -332,7 +361,7 @@ function AppContent() {
     <div className="min-h-screen bg-slate-900">
       {/* Header */}
       <Header
-        agentStatus={aiAgentStore.agent?.status || 'ACTIVE'}
+        agentStatus={aiAgentStore.agent?.status || "ACTIVE"}
         unreadNotifications={notificationsStore.unreadCount}
         onMenuClick={() => setSidebarOpen(true)}
         user={user}
@@ -348,16 +377,18 @@ function AppContent() {
       />
 
       {/* Main Content */}
-      <main className={cn(
-        'pt-16 min-h-screen transition-all duration-300',
-        'lg:ml-64'
-      )}>
+      <main
+        className={cn(
+          "pt-16 min-h-screen transition-all duration-300",
+          "lg:ml-64",
+        )}
+      >
         <div className="p-4 lg:p-6 max-w-7xl mx-auto">
           {/* Page Title */}
-          {currentView !== 'dashboard' && (
+          {currentView !== "dashboard" && (
             <div className="mb-6">
               <h1 className="text-2xl font-display font-bold text-white capitalize">
-                {currentView.replace('-', ' ')}
+                {currentView.replace("-", " ")}
               </h1>
               <div className="h-px w-24 bg-gradient-to-r from-brand-500 to-transparent mt-2" />
             </div>
@@ -370,13 +401,19 @@ function AppContent() {
 
       {/* Floating Action Button (Mobile) */}
       <button
-        onClick={() => aiAgentStore.isRunning ? aiAgentStore.stopAgent() : aiAgentStore.runAgent()}
+        onClick={() =>
+          aiAgentStore.isRunning
+            ? aiAgentStore.stopAgent()
+            : aiAgentStore.runAgent()
+        }
         className={cn(
-          'fixed bottom-6 right-6 lg:hidden',
-          'w-14 h-14 rounded-full',
-          aiAgentStore.isRunning ? 'bg-red-500 text-white animate-pulse' : 'bg-brand-500 text-white',
-          'flex items-center justify-center',
-          'shadow-lg shadow-brand-500/25 transition-transform hover:scale-110'
+          "fixed bottom-6 right-6 lg:hidden",
+          "w-14 h-14 rounded-full",
+          aiAgentStore.isRunning
+            ? "bg-red-500 text-white animate-pulse"
+            : "bg-brand-500 text-white",
+          "flex items-center justify-center",
+          "shadow-lg shadow-brand-500/25 transition-transform hover:scale-110",
         )}
       >
         {aiAgentStore.isRunning ? (

@@ -1,186 +1,227 @@
-import { mockUser, mockUsers, mockGrants, mockStats, mockNotifications, mockSchoolProfile, mockAgent } from './mockData';
-import type { Proposal } from '../types';
+import {
+  mockUser,
+  mockUsers,
+  mockGrants,
+  mockStats,
+  mockNotifications,
+  mockSchoolProfile,
+  mockAgent,
+} from "./mockData";
+import type { Proposal } from "../types";
 
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 // Enable Mock Mode if on GitHub Pages or if explicitly set
-const IS_GH_PAGES = window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app');
-const IS_DEMO_ENV = import.meta.env.MODE === 'demo';
+const IS_GH_PAGES =
+  window.location.hostname.includes("github.io") ||
+  window.location.hostname.includes("vercel.app");
+const IS_DEMO_ENV = import.meta.env.MODE === "demo";
 const FORCE_MOCK = false; // Disabled - now using real API to fetch live grants
 const IS_DEMO = IS_GH_PAGES || IS_DEMO_ENV || FORCE_MOCK;
 
-console.log(' [DEBUG] API Initialization:', {
-    hostname: window.location.hostname,
-    IS_GH_PAGES,
-    IS_DEMO_ENV,
-    IS_DEMO
+console.log(" [DEBUG] API Initialization:", {
+  hostname: window.location.hostname,
+  IS_GH_PAGES,
+  IS_DEMO_ENV,
+  IS_DEMO,
 });
 
 // Mock Agent State for continuous loop simulation
 let demoAgentState = {
-    isRunning: false,
-    logs: [] as any[],
-    lastLogTime: 0
+  isRunning: false,
+  logs: [] as any[],
+  lastLogTime: 0,
 };
 
 function getToken(): string | null {
-    return localStorage.getItem('giaa_token');
+  return localStorage.getItem("giaa_token");
 }
 
 function getHeaders(): HeadersInit {
-    const token = getToken();
-    return {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
+  const token = getToken();
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
-    const contentType = res.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'Request failed');
-        return data.data;
-    } else {
-        // If we get HTML (404/500), throw specific error to trigger fallback
-        throw new Error('INVALID_JSON_RESPONSE');
-    }
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Request failed");
+    return data.data;
+  } else {
+    // If we get HTML (404/500), throw specific error to trigger fallback
+    throw new Error("INVALID_JSON_RESPONSE");
+  }
 }
 
 // Helper to simulate network delay in demo mode
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Auth
 export const api = {
-    auth: {
-        login: async (email: string, password: string) => {
-            try {
-                if (IS_DEMO) {
-                    await delay(800);
-                    // Find user by email (case-insensitive)
-                    const normalizedEmail = email.toLowerCase();
-                    const foundUser = mockUsers.find(u => u.email.toLowerCase() === normalizedEmail) || mockUsers[0];
+  auth: {
+    login: async (email: string, password: string) => {
+      try {
+        if (IS_DEMO) {
+          await delay(800);
+          // Find user by email (case-insensitive)
+          const normalizedEmail = email.toLowerCase();
+          const foundUser =
+            mockUsers.find((u) => u.email.toLowerCase() === normalizedEmail) ||
+            mockUsers[0];
 
-                    return { token: `demo-token-${foundUser.id}`, user: foundUser };
-                }
-                const res = await fetch(`${API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password }),
-                });
-                return await handleResponse<{ token: string; user: any }>(res);
-            } catch (error: any) {
-                console.warn('Login failed, attempting fallback...', error);
-                // Fallback to mock if network/server fails (e.g. on static deployment)
-                if (error.message === 'INVALID_JSON_RESPONSE' || error.message.includes('Unexpected token')) {
-                    await delay(500);
-                    return { token: 'demo-token-123', user: mockUser };
-                }
-                throw error;
-            }
-        },
-        verify: async () => {
-            if (IS_DEMO) {
-                const token = getToken();
-                if (token && token.startsWith('demo-token-')) {
-                    const userId = token.replace('demo-token-', '');
-                    const user = mockUsers.find(u => u.id === userId);
-                    if (user) return { user };
-                }
-                return { user: mockUser };
-            }
-            const res = await fetch(`${API_BASE}/auth/verify`, { headers: getHeaders() });
-            return handleResponse<{ user: any }>(res);
-        },
-        getUsers: async () => {
-            if (IS_DEMO) return mockUsers;
-            const res = await fetch(`${API_BASE}/auth/users`, { headers: getHeaders() });
-            return handleResponse<any[]>(res);
-        },
+          return { token: `demo-token-${foundUser.id}`, user: foundUser };
+        }
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        return await handleResponse<{ token: string; user: any }>(res);
+      } catch (error: any) {
+        console.warn("Login failed, attempting fallback...", error);
+        // Fallback to mock if network/server fails (e.g. on static deployment)
+        if (
+          error.message === "INVALID_JSON_RESPONSE" ||
+          error.message.includes("Unexpected token")
+        ) {
+          await delay(500);
+          return { token: "demo-token-123", user: mockUser };
+        }
+        throw error;
+      }
     },
-
-    grants: {
-        list: async (params?: { category?: string; status?: string; relevance?: string; search?: string }) => {
-            if (IS_DEMO) {
-                await delay(500);
-                let filtered = [...mockGrants];
-                if (params?.status && params.status !== 'ALL') filtered = filtered.filter(g => g.status === params.status);
-                if (params?.category && params.category !== 'ALL') filtered = filtered.filter(g => g.category === params.category);
-                if (params?.search) {
-                    const q = params.search.toLowerCase();
-                    filtered = filtered.filter(g => g.name.toLowerCase().includes(q) || g.organization.toLowerCase().includes(q));
-                }
-                return filtered;
-            }
-            const query = new URLSearchParams(params as any).toString();
-            const res = await fetch(`${API_BASE}/grants?${query}`, { headers: getHeaders() });
-            return handleResponse<any[]>(res);
-        },
-        get: async (id: string) => {
-            if (IS_DEMO) return mockGrants.find(g => g.id === id);
-            const res = await fetch(`${API_BASE}/grants/${id}`, { headers: getHeaders() });
-            return handleResponse<any>(res);
-        },
-        updateStatus: async (id: string, status: string) => {
-            if (IS_DEMO) {
-                const grant = mockGrants.find(g => g.id === id);
-                if (grant) grant.status = status as any;
-                return grant;
-            }
-            const res = await fetch(`${API_BASE}/grants/${id}/status`, {
-                method: 'PATCH',
-                headers: getHeaders(),
-                body: JSON.stringify({ status }),
-            });
-            return handleResponse<any>(res);
-        },
-        getStats: async () => {
-            if (IS_DEMO) return mockStats;
-            const res = await fetch(`${API_BASE}/grants/stats/dashboard`, { headers: getHeaders() });
-            return handleResponse<any>(res);
-        },
-        getDeadlineAlerts: async () => {
-            if (IS_DEMO) {
-                return mockGrants
-                    .filter(g => g.deadline)
-                    .map(g => ({
-                        id: g.id,
-                        grantId: g.id,
-                        grantName: g.name,
-                        deadline: g.deadline,
-                        daysRemaining: Math.ceil((new Date(g.deadline).getTime() - Date.now()) / (86400000)),
-                        priority: 'HIGH',
-                        status: 'PENDING'
-                    }))
-                    .filter(a => a.daysRemaining > 0 && a.daysRemaining < 90)
-                    .slice(0, 5);
-            }
-            const res = await fetch(`${API_BASE}/grants/alerts/deadlines`, { headers: getHeaders() });
-            return handleResponse<any[]>(res);
-        },
+    verify: async () => {
+      if (IS_DEMO) {
+        const token = getToken();
+        if (token && token.startsWith("demo-token-")) {
+          const userId = token.replace("demo-token-", "");
+          const user = mockUsers.find((u) => u.id === userId);
+          if (user) return { user };
+        }
+        return { user: mockUser };
+      }
+      const res = await fetch(`${API_BASE}/auth/verify`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<{ user: any }>(res);
     },
+    getUsers: async () => {
+      if (IS_DEMO) return mockUsers;
+      const res = await fetch(`${API_BASE}/auth/users`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any[]>(res);
+    },
+  },
 
-    proposals: {
-        list: async () => {
-            if (IS_DEMO) return [];
-            const res = await fetch(`${API_BASE}/proposals`, { headers: getHeaders() });
-            return handleResponse<any[]>(res);
-        },
-        create: async (grantId: string, title?: string) => {
-            if (IS_DEMO) {
-                // Template Generator for Real Grants
-                const getProposalContent = (id: string, title: string) => {
-                    const timestamp = new Date().toISOString().split('T')[0];
-                    const grantId = String(id).trim();
+  grants: {
+    list: async (params?: {
+      category?: string;
+      status?: string;
+      relevance?: string;
+      search?: string;
+    }) => {
+      if (IS_DEMO) {
+        await delay(500);
+        let filtered = [...mockGrants];
+        if (params?.status && params.status !== "ALL")
+          filtered = filtered.filter((g) => g.status === params.status);
+        if (params?.category && params.category !== "ALL")
+          filtered = filtered.filter((g) => g.category === params.category);
+        if (params?.search) {
+          const q = params.search.toLowerCase();
+          filtered = filtered.filter(
+            (g) =>
+              g.name.toLowerCase().includes(q) ||
+              g.organization.toLowerCase().includes(q),
+          );
+        }
+        return filtered;
+      }
+      const query = new URLSearchParams(params as any).toString();
+      const res = await fetch(`${API_BASE}/grants?${query}`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any[]>(res);
+    },
+    get: async (id: string) => {
+      if (IS_DEMO) return mockGrants.find((g) => g.id === id);
+      const res = await fetch(`${API_BASE}/grants/${id}`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+    updateStatus: async (id: string, status: string) => {
+      if (IS_DEMO) {
+        const grant = mockGrants.find((g) => g.id === id);
+        if (grant) grant.status = status as any;
+        return grant;
+      }
+      const res = await fetch(`${API_BASE}/grants/${id}/status`, {
+        method: "PATCH",
+        headers: getHeaders(),
+        body: JSON.stringify({ status }),
+      });
+      return handleResponse<any>(res);
+    },
+    getStats: async () => {
+      if (IS_DEMO) return mockStats;
+      const res = await fetch(`${API_BASE}/grants/stats/dashboard`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+    getDeadlineAlerts: async () => {
+      if (IS_DEMO) {
+        return mockGrants
+          .filter((g) => g.deadline)
+          .map((g) => ({
+            id: g.id,
+            grantId: g.id,
+            grantName: g.name,
+            deadline: g.deadline,
+            daysRemaining: Math.ceil(
+              (new Date(g.deadline).getTime() - Date.now()) / 86400000,
+            ),
+            priority: "HIGH",
+            status: "PENDING",
+          }))
+          .filter((a) => a.daysRemaining > 0 && a.daysRemaining < 90)
+          .slice(0, 5);
+      }
+      const res = await fetch(`${API_BASE}/grants/alerts/deadlines`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any[]>(res);
+    },
+  },
 
+  proposals: {
+    list: async () => {
+      if (IS_DEMO) return [];
+      const res = await fetch(`${API_BASE}/proposals`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any[]>(res);
+    },
+    create: async (grantId: string, title?: string) => {
+      if (IS_DEMO) {
+        // Template Generator for Real Grants
+        const getProposalContent = (id: string, title: string) => {
+          const timestamp = new Date().toISOString().split("T")[0];
+          const grantId = String(id).trim();
 
-                    // 1. Tony Elumelu Foundation (Entrepreneurship)
-                    if (grantId === '1') {
-                        return [
-                            {
-                                id: '1',
-                                title: 'Full Application: ' + title,
-                                content: `PROJECT TITLE: Glisten International Academy Student Entrepreneurship Incubator (SEI)
+          // 1. Tony Elumelu Foundation (Entrepreneurship)
+          if (grantId === "1") {
+            return [
+              {
+                id: "1",
+                title: "Full Application: " + title,
+                content: `PROJECT TITLE: Glisten International Academy Student Entrepreneurship Incubator (SEI)
 DATE: ${timestamp}
 
 1. EXECUTIVE SUMMARY
@@ -233,20 +274,23 @@ The SEI is designed to be self-sustaining. Profits from the "Glisten Market Day"
 
 8. CONCLUSION
 Investing in GIA's Student Entrepreneurship Incubator is an investment in Nigeria's future economic engine. By catching these minds young, we are not just teaching business; we are building a culture of self-reliance and innovation. We eagerly await the opportunity to partner with the Tony Elumelu Foundation.`,
-                                wordCount: 950,
-                                maxWords: 2000,
-                                aiSuggestions: ['Include specific examples of past student projects', 'Mention the specific TEF 7 Pillars']
-                            }
-                        ];
-                    }
+                wordCount: 950,
+                maxWords: 2000,
+                aiSuggestions: [
+                  "Include specific examples of past student projects",
+                  "Mention the specific TEF 7 Pillars",
+                ],
+              },
+            ];
+          }
 
-                    // 2. African Union (Education Innovation)
-                    if (grantId === '2') {
-                        return [
-                            {
-                                id: '1',
-                                title: 'Full Application: ' + title,
-                                content: `PROJECT TITLE: Scalable Robotics & AI Integration Model for West African Schools
+          // 2. African Union (Education Innovation)
+          if (grantId === "2") {
+            return [
+              {
+                id: "1",
+                title: "Full Application: " + title,
+                content: `PROJECT TITLE: Scalable Robotics & AI Integration Model for West African Schools
 DATE: ${timestamp}
 
 1. EXECUTIVE SUMMARY
@@ -296,20 +340,23 @@ Post-grant, the project will be sustained by charging a nominal participation fe
 
 8. CONCLUSION
 The African Union's vision for 2063 relies on a skilled youth populace. By empowering Glisten International Academy to share its resources, you are not just funding a school; you are igniting a movement. We are ready to lead the charge in STEM democratization.`,
-                                wordCount: 980,
-                                maxWords: 2500,
-                                aiSuggestions: ['Highlight the specific AU Agenda 2063 goals', 'Detail the criteria for selecting partner schools']
-                            }
-                        ];
-                    }
+                wordCount: 980,
+                maxWords: 2500,
+                aiSuggestions: [
+                  "Highlight the specific AU Agenda 2063 goals",
+                  "Detail the criteria for selecting partner schools",
+                ],
+              },
+            ];
+          }
 
-                    // 3. STEM to Space
-                    if (grantId === '3') {
-                        return [
-                            {
-                                id: '1',
-                                title: 'Full Application: ' + title,
-                                content: `PROJECT TITLE: "Reach for the Stars" - Astronomy & Physics Excellence Program
+          // 3. STEM to Space
+          if (grantId === "3") {
+            return [
+              {
+                id: "1",
+                title: "Full Application: " + title,
+                content: `PROJECT TITLE: "Reach for the Stars" - Astronomy & Physics Excellence Program
 DATE: ${timestamp}
 
 1. APPLICANT DETAILS
@@ -340,21 +387,24 @@ Total: $4,500
 
 6. EXPECTED OUTCOME
 Inspiration of 500+ students to pursue STEM careers. A deeper understanding of the universe among our student body.`,
-                                wordCount: 500,
-                                maxWords: 1000,
-                                aiSuggestions: ['Include a letter of recommendation from the Physics HOD', 'Mention specific NASRDA contacts if known']
-                            }
-                        ];
-                    }
+                wordCount: 500,
+                maxWords: 1000,
+                aiSuggestions: [
+                  "Include a letter of recommendation from the Physics HOD",
+                  "Mention specific NASRDA contacts if known",
+                ],
+              },
+            ];
+          }
 
-                    // 4. Default / Fallback Template (High Quality & Plain Text)
-                    return [
-                        {
-                            id: '1',
-                            title: 'Full Application: ' + title,
-                            content: `PROJECT TITLE: Comprehensive Digital Transformation in Education
+          // 4. Default / Fallback Template (High Quality & Plain Text)
+          return [
+            {
+              id: "1",
+              title: "Full Application: " + title,
+              content: `PROJECT TITLE: Comprehensive Digital Transformation in Education
 DATE: ${timestamp}
-REF: Grant Application (ID: ${grantId || 'N/A'})
+REF: Grant Application (ID: ${grantId || "N/A"})
 
 1. EXECUTIVE SUMMARY
 Glisten International Academy (GIA) seeks funding to implement a comprehensive digital transformation initiative. Our goal is to integrate advanced educational technologies into our core curriculum, ensuring every student is prepared for the 4th Industrial Revolution. This project addresses the critical need for digital literacy and collaborative learning environments in secondary education. We propose a phased implementation of smart classroom technology, teacher training, and curriculum enhancement.
@@ -423,176 +473,203 @@ A final report will be submitted to the grantor 12 months post-disbursement.
 
 10. CONCLUSION
 This grant represents a pivotal opportunity for Glisten International Academy to leapfrog into the future of education. We are committed to transparency, excellence, and impact. We thank you for considering our proposal.`,
-                            wordCount: 1100,
-                            maxWords: 2500,
-                            aiSuggestions: ['Customize the "Problem Statement" with specific data points', 'Attach the school\'s audited financial statement']
-                        }
-                    ];
-                };
+              wordCount: 1100,
+              maxWords: 2500,
+              aiSuggestions: [
+                'Customize the "Problem Statement" with specific data points',
+                "Attach the school's audited financial statement",
+              ],
+            },
+          ];
+        };
 
-                const newProposal: Proposal = {
-                    id: `demo-${Date.now()}`,
-                    grantId,
-                    title: title || 'Strategic Grant Proposal for Glisten International Academy',
-                    status: 'DRAFT',
-                    content: getProposalContent(grantId, title || 'Draft Proposal'),
-                    aiGenerated: true,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    version: 1
-                };
-                return newProposal;
-            }
-            const res = await fetch(`${API_BASE}/proposals`, {
-                method: 'POST',
-                headers: getHeaders(),
-                body: JSON.stringify({ grantId, title }),
-            });
-            return handleResponse<any>(res);
-        },
-        update: async (id: string, data: any) => {
-            if (IS_DEMO) return null;
-            const res = await fetch(`${API_BASE}/proposals/${id}`, {
-                method: 'PATCH',
-                headers: getHeaders(),
-                body: JSON.stringify(data),
-            });
-            return handleResponse<any>(res);
-        },
+        const newProposal: Proposal = {
+          id: `demo-${Date.now()}`,
+          grantId,
+          title:
+            title ||
+            "Strategic Grant Proposal for Glisten International Academy",
+          status: "DRAFT",
+          content: getProposalContent(grantId, title || "Draft Proposal"),
+          aiGenerated: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          version: 1,
+        };
+        return newProposal;
+      }
+      const res = await fetch(`${API_BASE}/proposals`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ grantId, title }),
+      });
+      return handleResponse<any>(res);
     },
-
-    notifications: {
-        list: async () => {
-            if (IS_DEMO) return mockNotifications;
-            const res = await fetch(`${API_BASE}/notifications`, { headers: getHeaders() });
-            return handleResponse<any[]>(res);
-        },
-        unreadCount: async () => {
-            if (IS_DEMO) return { count: 2 };
-            const res = await fetch(`${API_BASE}/notifications/unread-count`, { headers: getHeaders() });
-            return handleResponse<{ count: number }>(res);
-        },
-        markRead: async (id: string) => {
-            if (IS_DEMO) return { success: true };
-            const res = await fetch(`${API_BASE}/notifications/${id}/read`, {
-                method: 'PATCH',
-                headers: getHeaders(),
-            });
-            return handleResponse<any>(res);
-        },
-        markAllRead: async () => {
-            if (IS_DEMO) return { success: true };
-            const res = await fetch(`${API_BASE}/notifications/mark-all-read`, {
-                method: 'POST',
-                headers: getHeaders(),
-            });
-            return handleResponse<any>(res);
-        },
+    update: async (id: string, data: any) => {
+      if (IS_DEMO) return null;
+      const res = await fetch(`${API_BASE}/proposals/${id}`, {
+        method: "PATCH",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<any>(res);
     },
+  },
 
-    profile: {
-        get: async () => {
-            if (IS_DEMO) return mockSchoolProfile;
-            const res = await fetch(`${API_BASE}/profile`, { headers: getHeaders() });
-            return handleResponse<any>(res);
-        },
-        update: async (data: any) => {
-            if (IS_DEMO) return data;
-            const res = await fetch(`${API_BASE}/profile`, {
-                method: 'PUT',
-                headers: getHeaders(),
-                body: JSON.stringify(data),
-            });
-            return handleResponse<any>(res);
-        },
+  notifications: {
+    list: async () => {
+      if (IS_DEMO) return mockNotifications;
+      const res = await fetch(`${API_BASE}/notifications`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any[]>(res);
     },
+    unreadCount: async () => {
+      if (IS_DEMO) return { count: 2 };
+      const res = await fetch(`${API_BASE}/notifications/unread-count`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<{ count: number }>(res);
+    },
+    markRead: async (id: string) => {
+      if (IS_DEMO) return { success: true };
+      const res = await fetch(`${API_BASE}/notifications/${id}/read`, {
+        method: "PATCH",
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+    markAllRead: async () => {
+      if (IS_DEMO) return { success: true };
+      const res = await fetch(`${API_BASE}/notifications/mark-all-read`, {
+        method: "POST",
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+  },
 
-    agent: {
-        status: async () => {
-            if (IS_DEMO) {
-                // Simulate continuous activity if running
-                if (demoAgentState.isRunning) {
-                    const now = Date.now();
-                    // Add a new log entry every 3 seconds to simulate activity
-                    if (now - demoAgentState.lastLogTime > 3000) {
-                        const actions = [
-                            { action: 'SCANNING', detail: 'Scanning African Union Education Portal...' },
-                            { action: 'ANALYZING', detail: 'Processing 45 new grant entries...' },
-                            { action: 'FILTERING', detail: 'Matching eligibility against School Profile...' },
-                            { action: 'CONNECTING', detail: 'Verifying source connectivity...' },
-                            { action: 'DISCOVERING', detail: 'Found potential match: STEM Education Fund' }
-                        ];
-                        const randomEvent = actions[Math.floor(Math.random() * actions.length)];
+  profile: {
+    get: async () => {
+      if (IS_DEMO) return mockSchoolProfile;
+      const res = await fetch(`${API_BASE}/profile`, { headers: getHeaders() });
+      return handleResponse<any>(res);
+    },
+    update: async (data: any) => {
+      if (IS_DEMO) return data;
+      const res = await fetch(`${API_BASE}/profile`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+      });
+      return handleResponse<any>(res);
+    },
+  },
 
-                        demoAgentState.logs.unshift({
-                            startedAt: new Date().toISOString(),
-                            action: randomEvent.action,
-                            status: 'COMPLETED',
-                            grantsFound: Math.floor(Math.random() * 3),
-                            grantsMatched: Math.floor(Math.random() * 1),
-                            error: null
-                        });
+  agent: {
+    status: async () => {
+      if (IS_DEMO) {
+        // Simulate continuous activity if running
+        if (demoAgentState.isRunning) {
+          const now = Date.now();
+          // Add a new log entry every 3 seconds to simulate activity
+          if (now - demoAgentState.lastLogTime > 3000) {
+            const actions = [
+              {
+                action: "SCANNING",
+                detail: "Scanning African Union Education Portal...",
+              },
+              {
+                action: "ANALYZING",
+                detail: "Processing 45 new grant entries...",
+              },
+              {
+                action: "FILTERING",
+                detail: "Matching eligibility against School Profile...",
+              },
+              {
+                action: "CONNECTING",
+                detail: "Verifying source connectivity...",
+              },
+              {
+                action: "DISCOVERING",
+                detail: "Found potential match: STEM Education Fund",
+              },
+            ];
+            const randomEvent =
+              actions[Math.floor(Math.random() * actions.length)];
 
-                        // Keep log size manageable
-                        if (demoAgentState.logs.length > 50) demoAgentState.logs.pop();
-                        demoAgentState.lastLogTime = now;
-                    }
-                }
-
-                return {
-                    agent: {
-                        ...mockAgent,
-                        status: demoAgentState.isRunning ? 'ACTIVE' : 'IDLE',
-                        lastRun: new Date().toISOString()
-                    },
-                    isRunning: demoAgentState.isRunning,
-                    logs: demoAgentState.logs
-                };
-            }
-            const res = await fetch(`${API_BASE}/agent/status`, { headers: getHeaders() });
-            return handleResponse<any>(res);
-        },
-        run: async () => {
-            if (IS_DEMO) {
-                if (!demoAgentState.isRunning) {
-                    demoAgentState.isRunning = true;
-                    demoAgentState.logs.unshift({
-                        startedAt: new Date().toISOString(),
-                        action: 'SYSTEM',
-                        status: 'STARTED',
-                        grantsFound: 0,
-                        grantsMatched: 0,
-                        error: null
-                    });
-                }
-                return { success: true, message: 'Agent started' };
-            }
-            const res = await fetch(`${API_BASE}/agent/run`, {
-                method: 'POST',
-                headers: getHeaders(),
+            demoAgentState.logs.unshift({
+              startedAt: new Date().toISOString(),
+              action: randomEvent.action,
+              status: "COMPLETED",
+              grantsFound: Math.floor(Math.random() * 3),
+              grantsMatched: Math.floor(Math.random() * 1),
+              error: null,
             });
-            return handleResponse<any>(res);
-        },
-        stop: async () => {
-            if (IS_DEMO) {
-                demoAgentState.isRunning = false;
-                demoAgentState.logs.unshift({
-                    startedAt: new Date().toISOString(),
-                    action: 'SYSTEM',
-                    status: 'STOPPED',
-                    grantsFound: 0,
-                    grantsMatched: 0,
-                    error: null
-                });
-                return { success: true };
-            }
-            const res = await fetch(`${API_BASE}/agent/stop`, {
-                method: 'POST',
-                headers: getHeaders(),
-            });
-            return handleResponse<any>(res);
+
+            // Keep log size manageable
+            if (demoAgentState.logs.length > 50) demoAgentState.logs.pop();
+            demoAgentState.lastLogTime = now;
+          }
         }
+
+        return {
+          agent: {
+            ...mockAgent,
+            status: demoAgentState.isRunning ? "ACTIVE" : "IDLE",
+            lastRun: new Date().toISOString(),
+          },
+          isRunning: demoAgentState.isRunning,
+          logs: demoAgentState.logs,
+        };
+      }
+      const res = await fetch(`${API_BASE}/agent/status`, {
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
     },
+    run: async () => {
+      if (IS_DEMO) {
+        if (!demoAgentState.isRunning) {
+          demoAgentState.isRunning = true;
+          demoAgentState.logs.unshift({
+            startedAt: new Date().toISOString(),
+            action: "SYSTEM",
+            status: "STARTED",
+            grantsFound: 0,
+            grantsMatched: 0,
+            error: null,
+          });
+        }
+        return { success: true, message: "Agent started" };
+      }
+      const res = await fetch(`${API_BASE}/agent/run`, {
+        method: "POST",
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+    stop: async () => {
+      if (IS_DEMO) {
+        demoAgentState.isRunning = false;
+        demoAgentState.logs.unshift({
+          startedAt: new Date().toISOString(),
+          action: "SYSTEM",
+          status: "STOPPED",
+          grantsFound: 0,
+          grantsMatched: 0,
+          error: null,
+        });
+        return { success: true };
+      }
+      const res = await fetch(`${API_BASE}/agent/stop`, {
+        method: "POST",
+        headers: getHeaders(),
+      });
+      return handleResponse<any>(res);
+    },
+  },
 };
 
 export default api;

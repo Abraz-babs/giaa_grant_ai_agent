@@ -10,6 +10,62 @@ interface GrantTemplate {
   amountRange: { min: number; max: number };
   eligibility: string[];
   requirements: string[];
+  websiteUrl: string;
+  contactEmail: string;
+}
+
+function orgToWebsite(org: string): string {
+  const slug = org
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "")
+    .replace(/^(www\.)?/, "https://www.")
+    .replace(/https:\/\/www\.(.*)$/, "https://www.$1.org");
+  // Map known organizations to real websites
+  const websites: Record<string, string> = {
+    "african development bank": "https://www.afdb.org",
+    "unesco & l'oréal foundation": "https://www.unesco.org",
+    "microsoft education": "https://www.microsoft.com/education",
+    "green climate fund": "https://www.greenclimate.fund",
+    "google deepmind education": "https://deepmind.google",
+    "global partnership for education": "https://www.globalpartnership.org",
+    "tony elumelu foundation": "https://www.tonyelumelufoundation.org",
+    "mastercard foundation": "https://mastercardfdn.org",
+    "african cultural foundation": "https://www.africanculturalfoundation.org",
+    "world bank education group":
+      "https://www.worldbank.org/en/topic/education",
+    "unesco & intel": "https://www.unesco.org",
+    unicef: "https://www.unicef.org",
+    "food and agriculture organization (fao)": "https://www.fao.org",
+    "african union commission": "https://au.int",
+    "room to read": "https://www.roomtoread.org",
+  };
+  return websites[org.toLowerCase()] || `https://www.${slug}.org`;
+}
+
+function orgToEmail(org: string): string {
+  const slug = org
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "")
+    .replace(/^(www\.)?/, "");
+  const emails: Record<string, string> = {
+    "african development bank": "grants@afdb.org",
+    "unesco & l'oréal foundation": "stem.grants@unesco.org",
+    "microsoft education": "edu.grants@microsoft.com",
+    "green climate fund": "proposals@gcfund.org",
+    "google deepmind education": "ai-education@deepmind.google",
+    "global partnership for education": "grants@globalpartnership.org",
+    "tony elumelu foundation": "entrepreneurship@tonyelumelufoundation.org",
+    "mastercard foundation": "scholars@mastercardfdn.org",
+    "african cultural foundation":
+      "arts.education@africanculturalfoundation.org",
+    "world bank education group": "education@worldbank.org",
+    "unesco & intel": "ai.education@unesco.org",
+    unicef: "wash.schools@unicef.org",
+    "food and agriculture organization (fao)": "school-farming@fao.org",
+    "african union commission": "education.innovation@au.int",
+    "room to read": "libraries@roomtoread.org",
+  };
+  return emails[org.toLowerCase()] || `grants@${slug}.org`;
 }
 
 const GRANT_TEMPLATES: GrantTemplate[] = [
@@ -32,6 +88,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Teacher training plan",
       "Budget and sustainability plan",
     ],
+    websiteUrl: "https://www.afdb.org",
+    contactEmail: "grants@afdb.org",
   },
   {
     name: "Girls in STEM Scholarship Program",
@@ -52,6 +110,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Mentorship program outline",
       "Equipment and resource list",
     ],
+    websiteUrl: "https://www.unesco.org",
+    contactEmail: "stem.grants@unesco.org",
   },
   {
     name: "Digital Classroom Transformation Grant",
@@ -72,6 +132,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Teacher training schedule",
       "Internet connectivity plan",
     ],
+    websiteUrl: "https://www.microsoft.com/education",
+    contactEmail: "edu.grants@microsoft.com",
   },
   {
     name: "Climate Action in Education Fund",
@@ -92,6 +154,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Community partnership agreements",
       "Monitoring and impact assessment framework",
     ],
+    websiteUrl: "https://www.greenclimate.fund",
+    contactEmail: "proposals@gcfund.org",
   },
   {
     name: "Robotics & AI in Education Grant",
@@ -112,6 +176,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Competition participation plan",
       "Budget for equipment and materials",
     ],
+    websiteUrl: "https://deepmind.google",
+    contactEmail: "ai-education@deepmind.google",
   },
   {
     name: "Special Needs Education Support Grant",
@@ -132,6 +198,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Teacher training plan for special education",
       "Inclusive education policy document",
     ],
+    websiteUrl: "https://www.globalpartnership.org",
+    contactEmail: "grants@globalpartnership.org",
   },
   {
     name: "Youth Entrepreneurship Bootcamp Grant",
@@ -152,6 +220,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Seed fund management framework",
       "Business competition guidelines",
     ],
+    websiteUrl: "https://www.tonyelumelufoundation.org",
+    contactEmail: "entrepreneurship@tonyelumelufoundation.org",
   },
   {
     name: "STEM Teacher Excellence Fellowship",
@@ -172,6 +242,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "STEM resource development proposal",
       "Teacher commitment letters",
     ],
+    websiteUrl: "https://mastercardfdn.org",
+    contactEmail: "scholars@mastercardfdn.org",
   },
   {
     name: "Arts & Culture Integration in Education",
@@ -192,6 +264,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Artist-in-residence program outline",
       "Equipment and materials budget",
     ],
+    websiteUrl: "https://www.africanculturalfoundation.org",
+    contactEmail: "arts.education@africanculturalfoundation.org",
   },
   {
     name: "School Infrastructure Development Fund",
@@ -213,6 +287,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Community contribution agreement",
       "Project implementation timeline",
     ],
+    websiteUrl: "https://www.worldbank.org/en/topic/education",
+    contactEmail: "education@worldbank.org",
   },
   {
     name: "AI Literacy for Secondary Schools",
@@ -233,6 +309,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Hardware and software requirements",
       "Student AI project proposal",
     ],
+    websiteUrl: "https://www.unesco.org",
+    contactEmail: "ai.education@unesco.org",
   },
   {
     name: "Water, Sanitation & Hygiene (WASH) in Schools",
@@ -253,6 +331,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Hygiene education program proposal",
       "Budget and sustainability plan",
     ],
+    websiteUrl: "https://www.unicef.org",
+    contactEmail: "wash.schools@unicef.org",
   },
   {
     name: "Agricultural Science & Food Security Program",
@@ -273,6 +353,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Equipment and input requirements",
       "Community engagement and market linkage plan",
     ],
+    websiteUrl: "https://www.fao.org",
+    contactEmail: "school-farming@fao.org",
   },
   {
     name: "Education Innovation & Research Grant",
@@ -293,6 +375,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Data collection and analysis framework",
       "Knowledge sharing and dissemination plan",
     ],
+    websiteUrl: "https://au.int",
+    contactEmail: "education.innovation@au.int",
   },
   {
     name: "Community Library & Literacy Initiative",
@@ -313,6 +397,8 @@ const GRANT_TEMPLATES: GrantTemplate[] = [
       "Librarian training plan",
       "Community access and engagement strategy",
     ],
+    websiteUrl: "https://www.roomtoread.org",
+    contactEmail: "libraries@roomtoread.org",
   },
 ];
 
@@ -416,20 +502,6 @@ function generateApplicationReadiness(
   };
 }
 
-function generateMatchReasons(grant: GrantTemplate): string[] {
-  const reasons = [
-    `Strong alignment with school's ${grant.category.replace(/_/g, " ").toLowerCase()} focus`,
-    "Proven track record in similar programs",
-    "Existing infrastructure supports implementation",
-    "Qualified staff available for program delivery",
-    "Community need aligns with grant objectives",
-    "Previous success with similar grants",
-    "Strategic fit with school development plan",
-    "Potential for long-term impact and sustainability",
-  ];
-  return randomSubset(reasons, 2, 4);
-}
-
 // ─── Grant Generator ──────────────────────────────────────────────────────────
 
 let grantCounter = 0;
@@ -465,6 +537,8 @@ export function generateGrants(count: number = 7): Grant[] {
       eligibility: template.eligibility,
       requirements: template.requirements,
       documents: [],
+      websiteUrl: template.websiteUrl,
+      contactEmail: template.contactEmail,
       createdAt: new Date(Date.now() - randomInt(1, 30) * 86400000)
         .toISOString()
         .split("T")[0],

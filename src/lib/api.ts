@@ -1,5 +1,3 @@
-import type { Proposal } from "../types";
-
 const API_BASE = "/api";
 
 function getToken(): string | null {

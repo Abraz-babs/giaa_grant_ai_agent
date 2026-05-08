@@ -56,8 +56,8 @@ export const api = {
         await delay();
         const user = mockUsers.find((u) => u.email === email);
         if (!user) throw new Error("Invalid email or password");
-        if (password !== "password123")
-          throw new Error("Invalid email or password");
+        // On GitHub Pages (demo mode), accept any non-empty password
+        if (!password) throw new Error("Password is required");
         return {
           token: "mock-jwt-token-for-github-pages",
           user,

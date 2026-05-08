@@ -1,9 +1,14 @@
-import { useState, useCallback, useEffect } from 'react';
-import { api } from '@/lib/api';
+import { useState, useCallback, useEffect } from "react";
+import { api } from "@/lib/api";
 import type {
-  Grant, SchoolProfile, DashboardStats, DeadlineAlert,
-  Notification, Proposal, SearchFilters
-} from '@/types';
+  Grant,
+  SchoolProfile,
+  DashboardStats,
+  DeadlineAlert,
+  Notification,
+  Proposal,
+  SearchFilters,
+} from "@/types";
 
 // Grants Store — API-backed
 export const useGrantsStore = () => {
@@ -12,40 +17,56 @@ export const useGrantsStore = () => {
   const [filters, setFilters] = useState<SearchFilters>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchGrants = useCallback(async (params?: { category?: string; status?: string; relevance?: string; search?: string }) => {
-    setIsLoading(true);
-    try {
-      const data = await api.grants.list(params);
-      setGrants(data);
-    } catch (err) {
-      console.error('Failed to fetch grants:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const fetchGrants = useCallback(
+    async (params?: {
+      category?: string;
+      status?: string;
+      relevance?: string;
+      search?: string;
+    }) => {
+      setIsLoading(true);
+      try {
+        const data = await api.grants.list(params);
+        setGrants(data);
+      } catch (err) {
+        console.error("Failed to fetch grants:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     fetchGrants();
   }, [fetchGrants]);
 
-  const filterGrants = useCallback((newFilters: SearchFilters) => {
-    setFilters(newFilters);
-    const params: any = {};
-    if (newFilters.query) params.search = newFilters.query;
-    if (newFilters.categories?.length === 1) params.category = newFilters.categories[0];
-    if (newFilters.status?.length === 1) params.status = newFilters.status[0];
-    if (newFilters.relevanceScore?.length === 1) params.relevance = newFilters.relevanceScore[0];
-    fetchGrants(params);
-  }, [fetchGrants]);
+  const filterGrants = useCallback(
+    (newFilters: SearchFilters) => {
+      setFilters(newFilters);
+      const params: any = {};
+      if (newFilters.query) params.search = newFilters.query;
+      if (newFilters.categories?.length === 1)
+        params.category = newFilters.categories[0];
+      if (newFilters.status?.length === 1) params.status = newFilters.status[0];
+      if (newFilters.relevanceScore?.length === 1)
+        params.relevance = newFilters.relevanceScore[0];
+      fetchGrants(params);
+    },
+    [fetchGrants],
+  );
 
-  const updateGrantStatus = useCallback(async (grantId: string, status: Grant['status']) => {
-    try {
-      const updated = await api.grants.updateStatus(grantId, status);
-      setGrants(prev => prev.map(g => g.id === grantId ? updated : g));
-    } catch (err) {
-      console.error('Failed to update grant status:', err);
-    }
-  }, []);
+  const updateGrantStatus = useCallback(
+    async (grantId: string, status: Grant["status"]) => {
+      try {
+        const updated = await api.grants.updateStatus(grantId, status);
+        setGrants((prev) => prev.map((g) => (g.id === grantId ? updated : g)));
+      } catch (err) {
+        console.error("Failed to update grant status:", err);
+      }
+    },
+    [],
+  );
 
   const refreshGrants = useCallback(() => {
     fetchGrants();
@@ -59,7 +80,7 @@ export const useGrantsStore = () => {
     setSelectedGrant,
     filterGrants,
     updateGrantStatus,
-    refreshGrants
+    refreshGrants,
   };
 };
 
@@ -73,7 +94,7 @@ export const useDashboardStore = () => {
     totalFunding: 0,
     upcomingDeadlines: 0,
     aiMatches: 0,
-    successRate: 0
+    successRate: 0,
   });
   const [deadlineAlerts, setDeadlineAlerts] = useState<DeadlineAlert[]>([]);
   const [recentActivity] = useState<any[]>([]);
@@ -84,7 +105,7 @@ export const useDashboardStore = () => {
       const data = await api.grants.getStats();
       setStats(data);
     } catch (err) {
-      console.error('Failed to fetch stats:', err);
+      console.error("Failed to fetch stats:", err);
     }
   }, []);
 
@@ -93,7 +114,7 @@ export const useDashboardStore = () => {
       const data = await api.grants.getDeadlineAlerts();
       setDeadlineAlerts(data);
     } catch (err) {
-      console.error('Failed to fetch alerts:', err);
+      console.error("Failed to fetch alerts:", err);
     }
   }, []);
 
@@ -113,7 +134,7 @@ export const useDashboardStore = () => {
   }, [fetchStats, fetchAlerts]);
 
   const dismissAlert = useCallback((alertId: string) => {
-    setDeadlineAlerts(prev => prev.filter(a => a.id !== alertId));
+    setDeadlineAlerts((prev) => prev.filter((a) => a.id !== alertId));
   }, []);
 
   return {
@@ -122,7 +143,7 @@ export const useDashboardStore = () => {
     recentActivity,
     isRefreshing,
     refreshStats,
-    dismissAlert
+    dismissAlert,
   };
 };
 
@@ -139,13 +160,16 @@ export const useAIAgentStore = () => {
       setAgent(data.agent);
       setIsRunning(data.isRunning);
       if (data.logs?.length) {
-        setLogs(data.logs.map((l: any) =>
-          `[${l.startedAt || 'N/A'}] ${l.action}: ${l.status} — Found: ${l.grantsFound}, Matched: ${l.grantsMatched}${l.error ? ` Error: ${l.error}` : ''}`
-        ));
+        setLogs(
+          data.logs.map(
+            (l: any) =>
+              `[${l.startedAt || "N/A"}] ${l.action}: ${l.status} — Found: ${l.grantsFound}, Matched: ${l.grantsMatched}${l.error ? ` Error: ${l.error}` : ""}`,
+          ),
+        );
       }
       return data;
     } catch (err) {
-      console.error('Failed to fetch agent status:', err);
+      console.error("Failed to fetch agent status:", err);
       return null;
     }
   }, []);
@@ -159,21 +183,30 @@ export const useAIAgentStore = () => {
 
   const runAgent = useCallback(async () => {
     setIsRunning(true);
-    setLogs(prev => [`[${new Date().toLocaleTimeString()}] Requesting agent start...`, ...prev]);
+    setLogs((prev) => [
+      `[${new Date().toLocaleTimeString()}] Requesting agent start...`,
+      ...prev,
+    ]);
 
     try {
       const res = await api.agent.run();
       if (!res.success) {
-        setLogs(prev => [`[${new Date().toLocaleTimeString()}] Error: ${res.error}`, ...prev]);
+        setLogs((prev) => [
+          `[${new Date().toLocaleTimeString()}] Error: ${res.error}`,
+          ...prev,
+        ]);
         setIsRunning(false);
-        if (res.error === 'Agent is already running') fetchStatus();
+        if (res.error === "Agent is already running") fetchStatus();
       } else {
         // Success, the polling effect will handle updates
         fetchStatus();
       }
     } catch (err) {
       setIsRunning(false);
-      setLogs(prev => [`[${new Date().toLocaleTimeString()}] Connection Error: ${err}`, ...prev]);
+      setLogs((prev) => [
+        `[${new Date().toLocaleTimeString()}] Connection Error: ${err}`,
+        ...prev,
+      ]);
     }
   }, [fetchStatus]);
 
@@ -181,10 +214,13 @@ export const useAIAgentStore = () => {
     try {
       await api.agent.stop();
       setIsRunning(false);
-      setLogs(prev => [`[${new Date().toLocaleTimeString()}] Agent stopped by user`, ...prev]);
+      setLogs((prev) => [
+        `[${new Date().toLocaleTimeString()}] Agent stopped by user`,
+        ...prev,
+      ]);
       fetchStatus();
     } catch (err) {
-      console.error('Failed to stop agent:', err);
+      console.error("Failed to stop agent:", err);
     }
   }, [fetchStatus]);
 
@@ -192,19 +228,22 @@ export const useAIAgentStore = () => {
     if (agent) {
       setAgent((prev: any) => ({
         ...prev,
-        status: prev.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE'
+        status: prev.status === "ACTIVE" ? "PAUSED" : "ACTIVE",
       }));
     }
   }, [agent]);
 
-  const updateConfiguration = useCallback((config: any) => {
-    if (agent) {
-      setAgent((prev: any) => ({
-        ...prev,
-        configuration: { ...prev.configuration, ...config }
-      }));
-    }
-  }, [agent]);
+  const updateConfiguration = useCallback(
+    (config: any) => {
+      if (agent) {
+        setAgent((prev: any) => ({
+          ...prev,
+          configuration: { ...prev.configuration, ...config },
+        }));
+      }
+    },
+    [agent],
+  );
 
   return {
     agent,
@@ -213,7 +252,7 @@ export const useAIAgentStore = () => {
     runAgent,
     stopAgent,
     toggleAgent,
-    updateConfiguration
+    updateConfiguration,
   };
 };
 
@@ -229,7 +268,7 @@ export const useNotificationsStore = () => {
       const countData = await api.notifications.unreadCount();
       setUnreadCount(countData.count);
     } catch (err) {
-      console.error('Failed to fetch notifications:', err);
+      console.error("Failed to fetch notifications:", err);
     }
   }, []);
 
@@ -240,41 +279,44 @@ export const useNotificationsStore = () => {
   const markAsRead = useCallback(async (notificationId: string) => {
     try {
       await api.notifications.markRead(notificationId);
-      setNotifications(prev => prev.map(n =>
-        n.id === notificationId ? { ...n, read: true } : n
-      ));
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
+      );
+      setUnreadCount((prev) => Math.max(0, prev - 1));
     } catch (err) {
-      console.error('Failed to mark notification read:', err);
+      console.error("Failed to mark notification read:", err);
     }
   }, []);
 
   const markAllAsRead = useCallback(async () => {
     try {
       await api.notifications.markAllRead();
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
     } catch (err) {
-      console.error('Failed to mark all read:', err);
+      console.error("Failed to mark all read:", err);
     }
   }, []);
 
   const dismissNotification = useCallback((notificationId: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== notificationId));
-    setUnreadCount(prev => Math.max(0, prev - 1));
+    setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
+    setUnreadCount((prev) => Math.max(0, prev - 1));
   }, []);
 
-  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'createdAt'>) => {
-    const newNotification: Notification = {
-      ...notification,
-      id: Math.random().toString(36).substr(2, 9),
-      createdAt: new Date().toISOString()
-    };
-    setNotifications(prev => [newNotification, ...prev]);
-    if (!notification.read) {
-      setUnreadCount(prev => prev + 1);
-    }
-  }, []);
+  const addNotification = useCallback(
+    (notification: Omit<Notification, "id" | "createdAt">) => {
+      const newNotification: Notification = {
+        ...notification,
+        id: Math.random().toString(36).substr(2, 9),
+        createdAt: new Date().toISOString(),
+      };
+      setNotifications((prev) => [newNotification, ...prev]);
+      if (!notification.read) {
+        setUnreadCount((prev) => prev + 1);
+      }
+    },
+    [],
+  );
 
   return {
     notifications,
@@ -283,12 +325,12 @@ export const useNotificationsStore = () => {
     markAllAsRead,
     dismissNotification,
     addNotification,
-    refreshNotifications: fetchNotifications
+    refreshNotifications: fetchNotifications,
   };
 };
 
 // School Profile Store — API-backed
-export const useSchoolProfileStore = () => {
+export const useSchoolProfileStore = (authToken?: string | null) => {
   const [profile, setProfile] = useState<SchoolProfile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -297,41 +339,62 @@ export const useSchoolProfileStore = () => {
       const data = await api.profile.get();
       setProfile(data);
     } catch (err) {
-      console.error('Failed to fetch profile:', err);
+      console.error("Failed to fetch profile:", err);
     }
   }, []);
 
   useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  const updateProfile = useCallback(async (updates: Partial<SchoolProfile>) => {
-    try {
-      const merged = { ...profile, ...updates };
-      const data = await api.profile.update(merged);
-      setProfile(data);
-    } catch (err) {
-      console.error('Failed to update profile:', err);
+    if (authToken) {
+      fetchProfile();
     }
-  }, [profile]);
+  }, [authToken, fetchProfile]);
 
-  const addDocument = useCallback((document: any) => {
-    if (profile) {
-      setProfile(prev => prev ? {
-        ...prev,
-        documents: [...(prev.documents || []), document]
-      } : prev);
-    }
-  }, [profile]);
+  const updateProfile = useCallback(
+    async (updates: Partial<SchoolProfile>) => {
+      try {
+        const merged = { ...profile, ...updates };
+        const data = await api.profile.update(merged);
+        setProfile(data);
+      } catch (err) {
+        console.error("Failed to update profile:", err);
+      }
+    },
+    [profile],
+  );
 
-  const removeDocument = useCallback((documentId: string) => {
-    if (profile) {
-      setProfile(prev => prev ? {
-        ...prev,
-        documents: (prev.documents || []).filter((d: any) => d.id !== documentId)
-      } : prev);
-    }
-  }, [profile]);
+  const addDocument = useCallback(
+    (document: any) => {
+      if (profile) {
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                documents: [...(prev.documents || []), document],
+              }
+            : prev,
+        );
+      }
+    },
+    [profile],
+  );
+
+  const removeDocument = useCallback(
+    (documentId: string) => {
+      if (profile) {
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                documents: (prev.documents || []).filter(
+                  (d: any) => d.id !== documentId,
+                ),
+              }
+            : prev,
+        );
+      }
+    },
+    [profile],
+  );
 
   return {
     profile,
@@ -339,21 +402,23 @@ export const useSchoolProfileStore = () => {
     setIsEditing,
     updateProfile,
     addDocument,
-    removeDocument
+    removeDocument,
   };
 };
 
 // Proposal Store — API-backed
 export const useProposalStore = () => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
-  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
+    null,
+  );
 
   const fetchProposals = useCallback(async () => {
     try {
       const data = await api.proposals.list();
       setProposals(data);
     } catch (err) {
-      console.error('Failed to fetch proposals:', err);
+      console.error("Failed to fetch proposals:", err);
     }
   }, []);
 
@@ -367,31 +432,36 @@ export const useProposalStore = () => {
       grantId,
       title,
       content: [],
-      status: 'DRAFT',
+      status: "DRAFT",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       aiGenerated: false,
-      version: 1
+      version: 1,
     };
-    setProposals(prev => [...prev, newProposal]);
+    setProposals((prev) => [...prev, newProposal]);
     return newProposal;
   }, []);
 
-  const updateProposal = useCallback((proposalId: string, updates: Partial<Proposal>) => {
-    setProposals(prev => prev.map(p =>
-      p.id === proposalId
-        ? { ...p, ...updates, updatedAt: new Date().toISOString() }
-        : p
-    ));
-  }, []);
+  const updateProposal = useCallback(
+    (proposalId: string, updates: Partial<Proposal>) => {
+      setProposals((prev) =>
+        prev.map((p) =>
+          p.id === proposalId
+            ? { ...p, ...updates, updatedAt: new Date().toISOString() }
+            : p,
+        ),
+      );
+    },
+    [],
+  );
 
   const generateAIProposal = useCallback(async (grantId: string) => {
     try {
       const proposal = await api.proposals.create(grantId);
-      setProposals(prev => [...prev, proposal]);
+      setProposals((prev) => [...prev, proposal]);
       return proposal;
     } catch (err) {
-      console.error('Failed to generate AI proposal:', err);
+      console.error("Failed to generate AI proposal:", err);
       return null;
     }
   }, []);
@@ -402,7 +472,7 @@ export const useProposalStore = () => {
     setSelectedProposal,
     createProposal,
     updateProposal,
-    generateAIProposal
+    generateAIProposal,
   };
 };
 
@@ -416,31 +486,38 @@ export const useUserStore = () => {
       const data = await api.auth.getUsers();
       setUsers(data);
     } catch (err) {
-      console.error('Failed to fetch users:', err);
+      console.error("Failed to fetch users:", err);
     }
   }, []);
 
   useEffect(() => {
     // Get current user from localStorage (set by AuthContext)
     try {
-      const stored = localStorage.getItem('giaa_user');
+      const stored = localStorage.getItem("giaa_user");
       if (stored) {
         setCurrentUser(JSON.parse(stored));
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     fetchUsers();
   }, [fetchUsers]);
 
-  const updateUser = useCallback((userId: string, updates: any) => {
-    setUsers(prev => prev.map(u => u.id === userId ? { ...u, ...updates } : u));
-    if (currentUser?.id === userId) {
-      setCurrentUser((prev: any) => ({ ...prev, ...updates }));
-    }
-  }, [currentUser]);
+  const updateUser = useCallback(
+    (userId: string, updates: any) => {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === userId ? { ...u, ...updates } : u)),
+      );
+      if (currentUser?.id === userId) {
+        setCurrentUser((prev: any) => ({ ...prev, ...updates }));
+      }
+    },
+    [currentUser],
+  );
 
   return {
     currentUser,
     users,
-    updateUser
+    updateUser,
   };
 };

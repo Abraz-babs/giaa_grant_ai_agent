@@ -14,60 +14,6 @@ interface GrantTemplate {
   contactEmail: string;
 }
 
-function orgToWebsite(org: string): string {
-  const slug = org
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "")
-    .replace(/^(www\.)?/, "https://www.")
-    .replace(/https:\/\/www\.(.*)$/, "https://www.$1.org");
-  // Map known organizations to real websites
-  const websites: Record<string, string> = {
-    "african development bank": "https://www.afdb.org",
-    "unesco & l'oréal foundation": "https://www.unesco.org",
-    "microsoft education": "https://www.microsoft.com/education",
-    "green climate fund": "https://www.greenclimate.fund",
-    "google deepmind education": "https://deepmind.google",
-    "global partnership for education": "https://www.globalpartnership.org",
-    "tony elumelu foundation": "https://www.tonyelumelufoundation.org",
-    "mastercard foundation": "https://mastercardfdn.org",
-    "african cultural foundation": "https://www.africanculturalfoundation.org",
-    "world bank education group":
-      "https://www.worldbank.org/en/topic/education",
-    "unesco & intel": "https://www.unesco.org",
-    unicef: "https://www.unicef.org",
-    "food and agriculture organization (fao)": "https://www.fao.org",
-    "african union commission": "https://au.int",
-    "room to read": "https://www.roomtoread.org",
-  };
-  return websites[org.toLowerCase()] || `https://www.${slug}.org`;
-}
-
-function orgToEmail(org: string): string {
-  const slug = org
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "")
-    .replace(/^(www\.)?/, "");
-  const emails: Record<string, string> = {
-    "african development bank": "grants@afdb.org",
-    "unesco & l'oréal foundation": "stem.grants@unesco.org",
-    "microsoft education": "edu.grants@microsoft.com",
-    "green climate fund": "proposals@gcfund.org",
-    "google deepmind education": "ai-education@deepmind.google",
-    "global partnership for education": "grants@globalpartnership.org",
-    "tony elumelu foundation": "entrepreneurship@tonyelumelufoundation.org",
-    "mastercard foundation": "scholars@mastercardfdn.org",
-    "african cultural foundation":
-      "arts.education@africanculturalfoundation.org",
-    "world bank education group": "education@worldbank.org",
-    "unesco & intel": "ai.education@unesco.org",
-    unicef: "wash.schools@unicef.org",
-    "food and agriculture organization (fao)": "school-farming@fao.org",
-    "african union commission": "education.innovation@au.int",
-    "room to read": "libraries@roomtoread.org",
-  };
-  return emails[org.toLowerCase()] || `grants@${slug}.org`;
-}
-
 const GRANT_TEMPLATES: GrantTemplate[] = [
   {
     name: "Africa EdTech Innovation Fund",
